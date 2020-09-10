@@ -12,12 +12,13 @@ def print_generated_data(generated, n):
     for i in range(n):
         print(generated[i])
 
-model = load_model('../generator_model_066_070.h5')
-X = model.predict(generate_latent_points(3,10))
+model = load_model('../generator_model_066_074.h5')
+X = model.predict(generate_latent_points(3,1000))
 rows,columns = X.shape
 X_rescaled = np.zeros(X.shape)
-print('Empty array for rescaled data: ', X_rescaled)
 minmaxes = loadtxt('diabetes_minmaxes.csv', delimiter=',')
+
+print('Min/max scaling parameters for data:')
 print(minmaxes)
 
 for j in range(columns):
@@ -26,11 +27,18 @@ for j in range(columns):
     for i in range(rows):
         original_value = X[i,j]
         new_value = (original_value * min_max_difference) + minmaxes[j,0]
-        X_rescaled[i,j] = new_value
-        if j == 0:
-            X_rescaled[i,j] = round(new_value)
+        X_rescaled[i,j] = round(new_value)
+        if j == 5:
+            X_rescaled[i,j] = round(new_value, 1)
+        if j == 6:
+            X_rescaled[i,j] = round(new_value, 3)
         if j == columns - 1:
             X_rescaled[i,j] = round(original_value)
+        if(original_value == 0):
+            X_rescaled[i,j] = original_value
         
 #print(X[0:3])
-print(X_rescaled)
+np.set_printoptions(suppress=True)
+print(X)
+print('First 10 columns of generated data: ', X_rescaled[:10])
+np.savetxt('generated_data.csv', X_rescaled, fmt='%i,%i,%i,%i,%i,%1.1f,%1.3f,%i,%i', delimiter=',', newline='\n')

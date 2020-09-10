@@ -107,6 +107,7 @@ num_epochs=1500,
 batch_size=32):
     batches_per_epoch = int(dataset.shape[0] / batch_size)
     half_batch = int(batch_size / 2)
+    converged = False
     for i in range(num_epochs):
         for j in range(batches_per_epoch):
             X_real, y_real = generate_real_samples(scaled_dataset, half_batch)
@@ -121,7 +122,7 @@ batch_size=32):
             if(i + 1) % 100 == 0:
                 print('Summary----------------------------------------')
                 real_acc, fake_acc = performance_summary(i, generator_model, discriminator_model, scaled_dataset, latent_dimension)
-                if real_acc > 55 and fake_acc > 55:
+                if real_acc > 65 and fake_acc > 65:
                     filename = '../generator_model_%03d_%03d.h5' % (real_acc, fake_acc)
                     print('saving ', filename)
                     generator_model.save(filename)
