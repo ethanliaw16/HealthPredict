@@ -1,6 +1,6 @@
 from numpy import loadtxt
 from keras.models import Sequential
-from keras.layers import Dense, LeakyReLU
+from keras.layers import Dense, LeakyReLU, Dropout
 from keras.optimizers import Adam
 from numpy.random import randint, uniform, randn, rand
 from sklearn.preprocessing import minmax_scale
@@ -12,9 +12,14 @@ import random
 
 def discriminator():
     model = Sequential()
-    model.add(Dense(12, input_dim=9, activation='relu'))
-    model.add(Dense(6, activation='relu'))
+    model.add(Dense(512, input_dim=9))
+    model.add(LeakyReLU(alpha=.2))
+    model.add(Dropout(.4))
+    model.add(Dense(256, activation='relu'))
+    model.add(LeakyReLU(alpha=.2))
+    model.add(Dropout(.4))
     model.add(Dense(1, activation='sigmoid'))
+    
     opt = Adam(lr=0.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
     return model
