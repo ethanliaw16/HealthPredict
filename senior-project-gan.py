@@ -96,6 +96,7 @@ def performance_summary(epoch, generator_model, discriminator_model, dataset, la
     x_fake, y_fake = generate_fake_samples_with_model(generator_model, latent_dimension, num_samples)
     _, acc_fake = discriminator_model.evaluate(x_fake, y_fake, verbose = 0)
     print('>Accuracy real: %.0f%%, fake: %.0f%%' % (acc_real*100, acc_fake*100))
+    return (acc_real*100, acc_fake*100)
 
 def train_complete_model(generator_model, 
 discriminator_model, 
@@ -119,10 +120,12 @@ batch_size=32):
                 print('>%d, %d/%d, d=%.3f, g=%.3f' % (i+1, j+1, batches_per_epoch, discriminator_loss, generator_loss))
             if(i + 1) % 100 == 0:
                 print('Summary----------------------------------------')
-                performance_summary(i, generator_model, discriminator_model, scaled_dataset, latent_dimension)
-                filename = '../generator_model_%03d.h5' % (i + 1)
-                print('saving ', filename)
-                generator_model.save(filename)
+                real_acc, fake_acc = performance_summary(i, generator_model, discriminator_model, scaled_dataset, latent_dimension)
+                if real_acc > 55 and fake_acc > 55:
+                    filename = '../generator_model_%03d_%03d.h5' % (real_acc, fake_acc)
+                    print('saving ', filename)
+                    generator_model.save(filename)
+                
 
 def get_data_min_max(dataset):
     _,num_columns = dataset.shape
@@ -156,7 +159,7 @@ print('Test', X.shape, y.shape)
 
 discriminator_model = discriminator()
 
-#train_discriminator(discriminator_model,scaled_dataset)
+train_discriminator(discriminator_model,scaled_dataset)
 
 latent_dimension = 3
 generator_model = generator(latent_dimension)
@@ -166,8 +169,8 @@ gan_model = build_gan(generator_model, discriminator_model)
 gan_model.summary()
 
 mins_and_maxes = get_data_min_max(X)
-print(mins_and_maxes)
-#train_complete_model(generator_model, discriminator_model, gan_model, scaled_dataset, latent_dimension)
+
+train_complete_model(generator_model, discriminator_model, gan_model, scaled_dataset, latent_dimension)
 
 #print(generate_fake_samples_with_model(generator_model,50,10))
 
