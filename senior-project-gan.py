@@ -27,6 +27,7 @@ def discriminator():
 def generator(latent_dimension):
     model = Sequential()
     model.add(Dense(256, input_dim=latent_dimension))
+    model.add(LeakyReLU(alpha=.2))
     model.add(Dense(9, activation = 'relu'))
     opt = Adam(lr=.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
@@ -107,19 +108,24 @@ batch_size=32):
     half_batch = int(batch_size / 2)
     for i in range(num_epochs):
         for j in range(batches_per_epoch):
-            X_real, y_real = generate_real_samples(dataset, half_batch)
+            X_real, y_real = generate_real_samples(scaled_dataset, half_batch)
             X_fake, y_fake = generate_fake_samples_with_model(generator_model, latent_dimension, half_batch)
             X, y = np.vstack((X_real, X_fake)), np.vstack((y_real, y_fake))
             discriminator_loss, _ = discriminator_model.train_on_batch(X, y)
             X_gan = generate_latent_points(latent_dimension, batch_size)
             y_gan = np.ones((batch_size, 1))
             generator_loss = gan_model.train_on_batch(X_gan, y_gan)
-            print('>%d, %d/%d, d=%.3f, g=%.3f' % (i+1, j+1, batches_per_epoch, discriminator_loss, generator_loss))
+            if (i + 1) % 10 == 0:
+                print('>%d, %d/%d, d=%.3f, g=%.3f' % (i+1, j+1, batches_per_epoch, discriminator_loss, generator_loss))
             if(i + 1) % 100 == 0:
                 print('Summary----------------------------------------')
-                performance_summary(i, generator_model, discriminator_model, dataset, latent_dimension)
-                filename = 'generator_model_%03d.h5' % (i + 1)
+                performance_summary(i, generator_model, discriminator_model, scaled_dataset, latent_dimension)
+                filename = '../generator_model_%03d.h5' % (i + 1)
+                print('saving ', filename)
                 generator_model.save(filename)
+
+def get_data_min_max(dataset):
+    
 
 
 # load the dataset

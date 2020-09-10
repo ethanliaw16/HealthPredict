@@ -10,7 +10,7 @@ def print_generated_data(generated, n):
     for i in range(n):
         print(generated[i])
 
-model = load_model('generator_model_1500.h5')
-X = model.predict(generate_latent_points(3,5))
+model = load_model('../generator_model_200.h5')
+X = model.predict(generate_latent_points(3,10))
 
 print(X)
