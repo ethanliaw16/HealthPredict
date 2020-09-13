@@ -6,11 +6,15 @@ https://towardsdatascience.com/deploying-a-deep-learning-model-using-flask-3ec16
 Dependencies for keras and flask
 (Run the following pip install commands to get these)
 
-`pip install numpy`
-`pip install pandas`
-`pip install tensorflow`
-`pip install keras`
-`pip install flask`
+`>pip install numpy`
+
+`>pip install pandas`
+
+`>pip install tensorflow`
+
+`>pip install keras`
+
+`>pip install flask`
 
 Running flask apps 
 
