@@ -16,8 +16,9 @@
             </p>
             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
             <script>
+                shuffle = 0
                 $("#get-data-button").click(function(event){
-                    $.get("http://192.168.1.88:5000/home", function(response){
+                    $.get("http://192.168.1.76:5000/home", function(response){
                         //$("#received_data").text(response.diabetes_data);
                         $("#intro-message").removeAttr('hidden')
                         $("#patient-info").removeAttr('hidden')
@@ -26,34 +27,59 @@
                         console.log(response.fake.substring(1,response.fake.length -1));
                         fake_as_array = response.fake.substring(1,response.fake.length - 1).split(", ")
                         real_as_array = response.real.substring(1,response.real.length - 1).split(", ")
+                        
+                        shuffle = Math.floor(Math.random * 2)
+                        //Shuffle is 0 -> patient B is real
+                        //Shuffle is 1 -> patient A is real
                         for(i = 0; i < 4; i++){
-                            console.log(math.floor(math.random * 2))
+                            console.log(Math.floor(Math.random * 2))
                         }
-                        shuffle = math.floor(math.random * 2)
                         if(shuffle == 0){
-                            
-                        }
-                        $("#num-pregnancies-1").text(fake_as_array[0])
-                        $("#glucose-1").text(fake_as_array[1])
-                        $("#blood-pressure-1").text(fake_as_array[2])
-                        $("#skin-thickness-1").text(fake_as_array[3])
-                        $("#insulin-1").text(fake_as_array[4])
-                        $("#bmi-1").text(fake_as_array[5])
-                        $("#diabetes-pedigree-1").text(fake_as_array[6])
-                        $("#age-1").text(fake_as_array[7])
-                        $("#outcome-1").text(fake_as_array[8])
+                            $("#num-pregnancies-1").text(fake_as_array[0])
+                            $("#glucose-1").text(fake_as_array[1])
+                            $("#blood-pressure-1").text(fake_as_array[2])
+                            $("#skin-thickness-1").text(fake_as_array[3])
+                            $("#insulin-1").text(fake_as_array[4])
+                            $("#bmi-1").text(fake_as_array[5])
+                            $("#diabetes-pedigree-1").text(fake_as_array[6])
+                            $("#age-1").text(fake_as_array[7])
+                            $("#outcome-1").text(fake_as_array[8])
 
-                        $("#num-pregnancies-2").text(real_as_array[0])
-                        $("#glucose-2").text(real_as_array[1])
-                        $("#blood-pressure-2").text(real_as_array[2])
-                        $("#skin-thickness-2").text(real_as_array[3])
-                        $("#insulin-2").text(real_as_array[4])
-                        $("#bmi-2").text(real_as_array[5])
-                        $("#diabetes-pedigree-2").text(real_as_array[6])
-                        $("#age-2").text(real_as_array[7])
-                        $("#outcome-2").text(real_as_array[8])
+                            $("#num-pregnancies-2").text(real_as_array[0])
+                            $("#glucose-2").text(real_as_array[1])
+                            $("#blood-pressure-2").text(real_as_array[2])
+                            $("#skin-thickness-2").text(real_as_array[3])
+                            $("#insulin-2").text(real_as_array[4])
+                            $("#bmi-2").text(real_as_array[5])
+                            $("#diabetes-pedigree-2").text(real_as_array[6])
+                            $("#age-2").text(real_as_array[7])
+                            $("#outcome-2").text(real_as_array[8])
+                        }
+                        else{
+                            $("#num-pregnancies-1").text(real_as_array[0])
+                            $("#glucose-1").text(real_as_array[1])
+                            $("#blood-pressure-1").text(real_as_array[2])
+                            $("#skin-thickness-1").text(real_as_array[3])
+                            $("#insulin-1").text(real_as_array[4])
+                            $("#bmi-1").text(real_as_array[5])
+                            $("#diabetes-pedigree-1").text(real_as_array[6])
+                            $("#age-1").text(real_as_array[7])
+                            $("#outcome-1").text(real_as_array[8])
+
+                            $("#num-pregnancies-2").text(fake_as_array[0])
+                            $("#glucose-2").text(fake_as_array[1])
+                            $("#blood-pressure-2").text(fake_as_array[2])
+                            $("#skin-thickness-2").text(fake_as_array[3])
+                            $("#insulin-2").text(fake_as_array[4])
+                            $("#bmi-2").text(fake_as_array[5])
+                            $("#diabetes-pedigree-2").text(fake_as_array[6])
+                            $("#age-2").text(fake_as_array[7])
+                            $("#outcome-2").text(fake_as_array[8])
+                        }
+                        
                     });
                 });
+            $("#get-data-button").click(function(event){})
             </script>
         </div>
         <div id="patient-info" hidden=true>
