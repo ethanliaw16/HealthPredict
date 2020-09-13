@@ -20,6 +20,6 @@ To run a flask web app, navigate to the flask_apps directory and set the environ
 You can then run the app with the following command. 
 `flask run --host=0.0.0.0` 
 
-You can then reach the app by going to localhost:5000/static/home.html or localhost:5000/static/guessthereal.html. 
-You can also replace localhost with your computer's local ip address. 
+You can then reach the app by going to http:/localhost:5000/static/home.html or http:/localhost:5000/static/guessthereal.html. 
+You can also replace localhost with your computer's local ip address. This will probably changed for our actual deployment, but for development purposes it will probably work for now.
 
