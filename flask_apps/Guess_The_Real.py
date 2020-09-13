@@ -36,7 +36,7 @@ def generate_fake_data(num_samples_to_generate):
 
     for j in range(columns):
         min_max_difference = minmaxes[j,1] - minmaxes[j,0]
-        print('min/max/diff of ', j, ': ', minmaxes[j,1], ', ', minmaxes[j,0], ', ', min_max_difference )
+        #print('min/max/diff of ', j, ': ', minmaxes[j,1], ', ', minmaxes[j,0], ', ', min_max_difference )
         for i in range(rows):
             original_value = generated_data[i,j]
             new_value = (original_value * min_max_difference) + minmaxes[j,0]
