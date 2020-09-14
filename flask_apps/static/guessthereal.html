@@ -65,7 +65,7 @@
             var shuffle = 0;
             $("#get-data-button").click(function(event){
                 $("#feedback-text").attr('hidden',true)
-                $.get("http://192.168.1.88:5000/home", function(response){
+                $.get("http://localhost:5000/home", function(response){
                     //$("#received_data").text(response.diabetes_data);
                     $("#intro-message").removeAttr('hidden')
                     $("#patient-info").removeAttr('hidden')
