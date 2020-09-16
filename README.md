@@ -27,6 +27,6 @@ On MacOS, the commands are:
 You can then run the app with the following command. 
 `flask run --host=0.0.0.0` 
 
-You can then reach the app by going to http:/localhost:5000/static/home.html or http:/localhost:5000/static/guessthereal.html. 
+You can then reach the app by going to http:/localhost:5000/static/homepage.html or http:/localhost:5000/static/guessthereal.html. 
 You can also replace localhost with your computer's local ip address. This will probably changed for our actual deployment, but for development purposes it will probably work for now.
 
