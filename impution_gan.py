@@ -25,7 +25,7 @@ for(column_name, column_data) in dataset.iteritems():
 
 print(columns_with_many_missing_values)
 
-dataset_less_columns = dataset.drop(columns=['payer_code','medical_specialty'])
+dataset_less_columns = dataset.drop(columns=['payer_code','medical_specialty', 'encounter_id', 'patient_nbr'])
 print('Shape of dataset with dropped columns: ', dataset_less_columns.shape)
 dataset_no_missing = dataset_less_columns[(dataset_less_columns != '?').all(axis=1)]
 print('Shape of data without missing values: ', dataset_no_missing.shape)
