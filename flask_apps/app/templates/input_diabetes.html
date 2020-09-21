@@ -1,0 +1,72 @@
+<html>
+    <title>Diabetes Inputs</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='input_diabetes.css') }}">
+
+  <h1 class="patient-info">Patient Information for Predicting</h1><h1 class="diabetes">Diabetes</h1>
+  <div class="input">
+    <form class="form" #f="ngForm" action='' method='POST'>
+      {{ form.hidden_tag() }}
+      <div class="height">
+        <label for="height">*Height (Inches)</label>
+      </div>
+      {% if form.height.errors %}
+      {{ form.height(class="input-boxes") }}
+      {% for error in form.height.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.height(class="input-boxes") }}
+      {% endif %}
+
+      <div class="weight">
+        <label for="weight">*Weight (Pounds)</label>
+      </div>
+      {% if form.weight.errors %}
+      {{ form.weight(class="input-boxes") }}
+      {% for error in form.weight.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.weight(class="input-boxes") }}
+      {% endif %}
+
+      <div class="age">
+        <label for="age">*Age (Years)</label>
+      </div>
+      {% if form.age.errors %}
+      {{ form.age(class="input-boxes") }}
+      {% for error in form.age.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.age(class="input-boxes") }}
+      {% endif %}
+
+      <div class="glucose">
+        <label for="glucose">*Glucose Level (Units)</label>
+      </div>
+      {% if form.glucose.errors %}
+      {{ form.glucose(class="input-boxes") }}
+      {% for error in form.glucose.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.glucose(class="input-boxes") }}
+      {% endif %}
+      
+
+      <div class="required">
+        *denotes required fields. 
+      </div>
+      <div class="double-check">
+        Please double check all inputs to ensure they are correct before submitting.
+      </div>
+      <div class="submit_data_div">
+        <div type="submit">
+        </div>
+        {{ form.submit(class="submit_data") }}
+      </div>
+    </form>
+  </div>
+</body>
+</html>
