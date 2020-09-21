@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Guess The Real
+        </title>
+    </head>
+    <body>
+        <div>
+            <p>Can you tell if a computer is faking?</p>
+            <button id="get-data-button">Generate Data</button>
+            <p id="intro-message" hidden=true>
+                Below is the medical information for two different "individuals". 
+                One of them is from the Pima Indian Diabetes Dataset from UCI. The other was generated
+                by our machine learning model. Try to tell which one is which!
+            </p>
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            
+            <div id="patient-info" hidden=true>
+                <table style="border-spacing:25px;">
+                    <tr>
+                        <th>Patient</th>
+                        <th id="num-pregnancies-header">Number of Pregnancies</th>
+                        <th id="glucose-header">Glucose Level</th>
+                        <th id="blood-pressure-header">Diastolic Blood Pressure</th>
+                        <th id="skin-thickness-header">Skin Fold Thickness</th>
+                        <th id="insulin-header">Insulin (0 for not recorded)</th>
+                        <th id="bmi-header">Body Mass Index</th>
+                        <th id="diabetes-pedigree-header">Diabetes Pedigree Function</th>
+                        <th id="age-header">Patient Age</th>
+                        <th id="outcome-header">Has Diabetes (1 for yes, 0 for no)</th>
+                    </tr>
+                    <tr id="patient-1-info" style="text-align:right">
+                        <td id="patient-1-id">A</td>
+                        <td id="num-pregnancies-1"></td>
+                        <td id="glucose-1"></td>
+                        <td id="blood-pressure-1"></td>
+                        <td id="skin-thickness-1"></td>
+                        <td id="insulin-1"></td>
+                        <td id="bmi-1"></td>
+                        <td id="diabetes-pedigree-1"></td>
+                        <td id="age-1"></td>
+                        <td id="outcome-1"></td>
+                    </tr>
+                    <tr id="patient-2-info" style="text-align:right">
+                        <td id="patient-2-id">B</td>
+                        <td id="num-pregnancies-2"></td>
+                        <td id="glucose-2"></td>
+                        <td id="blood-pressure-2"></td>
+                        <td id="skin-thickness-2"></td>
+                        <td id="insulin-2"></td>
+                        <td id="bmi-2"></td>
+                        <td id="diabetes-pedigree-2"></td>
+                        <td id="age-2"></td>
+                        <td id="outcome-2"></td>
+                    </tr>
+                </table>
+                <p id="question-text">Which Patient is real?</p>
+                <button id="patient-a-button">Patient A</button>
+                <button id="patient-b-button">Patient B</button>
+                <p id="feedback-text" hidden=true></p>
+            </div>
+        </div>
+        <script>
+            var shuffle = 0;
+            $("#get-data-button").click(function(event){
+                $("#feedback-text").attr('hidden',true)
+                $.get("http://localhost:5000/home", function(response){
+                    //$("#received_data").text(response.diabetes_data);
+                    $("#intro-message").removeAttr('hidden')
+                    $("#patient-info").removeAttr('hidden')
+                    $("#question").removeAttr('hidden')
+                    console.log(response);
+                    console.log(response.fake.substring(1,response.fake.length -1));
+                    fake_as_array = response.fake.substring(1,response.fake.length - 1).split(", ")
+                    real_as_array = response.real.substring(1,response.real.length - 1).split(", ")
+                    
+                    shuffle = Math.floor(Math.random() * 2)
+                    //Shuffle is 0 -> patient B is real
+                    //Shuffle is 1 -> patient A is real
+                    for(i = 0; i < 4; i++){
+                        console.log(Math.floor(Math.random() * 2))
+                    }
+                    if(shuffle == 0){
+                        $("#num-pregnancies-1").text(fake_as_array[0])
+                        $("#glucose-1").text(fake_as_array[1])
+                        $("#blood-pressure-1").text(fake_as_array[2])
+                        $("#skin-thickness-1").text(fake_as_array[3])
+                        $("#insulin-1").text(fake_as_array[4])
+                        $("#bmi-1").text(fake_as_array[5])
+                        $("#diabetes-pedigree-1").text(fake_as_array[6])
+                        $("#age-1").text(fake_as_array[7])
+                        $("#outcome-1").text(fake_as_array[8])
+
+                        $("#num-pregnancies-2").text(real_as_array[0])
+                        $("#glucose-2").text(real_as_array[1])
+                        $("#blood-pressure-2").text(real_as_array[2])
+                        $("#skin-thickness-2").text(real_as_array[3])
+                        $("#insulin-2").text(real_as_array[4])
+                        $("#bmi-2").text(real_as_array[5])
+                        $("#diabetes-pedigree-2").text(real_as_array[6])
+                        $("#age-2").text(real_as_array[7])
+                        $("#outcome-2").text(real_as_array[8])
+                    }
+                    else{
+                        $("#num-pregnancies-1").text(real_as_array[0])
+                        $("#glucose-1").text(real_as_array[1])
+                        $("#blood-pressure-1").text(real_as_array[2])
+                        $("#skin-thickness-1").text(real_as_array[3])
+                        $("#insulin-1").text(real_as_array[4])
+                        $("#bmi-1").text(real_as_array[5])
+                        $("#diabetes-pedigree-1").text(real_as_array[6])
+                        $("#age-1").text(real_as_array[7])
+                        $("#outcome-1").text(real_as_array[8])
+
+                        $("#num-pregnancies-2").text(fake_as_array[0])
+                        $("#glucose-2").text(fake_as_array[1])
+                        $("#blood-pressure-2").text(fake_as_array[2])
+                        $("#skin-thickness-2").text(fake_as_array[3])
+                        $("#insulin-2").text(fake_as_array[4])
+                        $("#bmi-2").text(fake_as_array[5])
+                        $("#diabetes-pedigree-2").text(fake_as_array[6])
+                        $("#age-2").text(fake_as_array[7])
+                        $("#outcome-2").text(fake_as_array[8])
+                    }
+                    
+                });
+            });
+            $("#patient-a-button").click(function(event){
+                $("#feedback-text").removeAttr('hidden')
+                if(shuffle == 1){
+                    $("#feedback-text").text("Correct!")
+                }
+                else{
+                    $("#feedback-text").text("Wrong.")
+                }
+            });
+            $("#patient-b-button").click(function(event){
+                $("#feedback-text").removeAttr('hidden')
+                if(shuffle == 0){
+                    $("#feedback-text").text("Correct!")
+                }
+                else{
+                    $("#feedback-text").text("Wrong.")
+                }
+            })
+        </script>
+    </body>
+</html>

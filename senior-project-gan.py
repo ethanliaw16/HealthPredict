@@ -4,6 +4,7 @@ from keras.layers import Dense, LeakyReLU, Dropout
 from keras.optimizers import Adam
 from numpy.random import randint, uniform, randn, rand
 from sklearn.preprocessing import minmax_scale
+import min_max
 import numpy as np
 import random
 
@@ -126,21 +127,6 @@ batch_size=32):
                     filename = '../generator_model_%03d_%03d.h5' % (real_acc, fake_acc)
                     print('saving ', filename)
                     generator_model.save(filename)
-                
-
-def get_data_min_max(dataset):
-    _,num_columns = dataset.shape
-    data_minmaxes = []
-    for i in range(num_columns):
-        column = dataset[:,i]
-        column_min = column.min()
-        column_max = column.max()
-        if i != 0: 
-            column = column[np.nonzero(column)]
-            column_min = column.min()
-        #print('Column ', i, ' min: ', column_min, ' max: ', column_max)
-        data_minmaxes.append([column_min,column_max])
-    return data_minmaxes
 
 # load the dataset
 dataset = loadtxt('diabetes.csv', delimiter=',')
@@ -149,6 +135,7 @@ X = dataset[:,0:8]
 y = dataset[:,8]
 y = np.reshape(y,(np.size(y), 1))
 x_scaled = minmax_scale(dataset[:,0:8])
+min_max.get_data_min_max(X)
 scaled_dataset = np.hstack((x_scaled,y))
 print('First 5 scaled rows: ')
 print(scaled_dataset[:5])
