@@ -122,13 +122,14 @@ y_diabetic = actual_diabetics['DMIndicator']
 y_nondiabetic = actual_nondiabetics['DMIndicator']
 
 print(X_dataframe.shape)
-print(X_dataframe.head())
+X_scaled = minmax_scale(X_dataframe)
+print(X_scaled[:5])
 print(y.head())
-train_X = X_dataframe[:7000].to_numpy()
-train_y = y[:7000].to_numpy()
+train_X = X_scaled[:7000]
+train_y = y[:7000]
 
-test_X = X_dataframe[7000:].to_numpy()
-test_y = y[7000:].to_numpy()
+test_X = X_scaled[7000:]
+test_y = y[7000:]
 
 print(train_X.shape)
 print(test_X.shape)
