@@ -6,16 +6,23 @@ https://towardsdatascience.com/deploying-a-deep-learning-model-using-flask-3ec16
 Dependencies for keras and flask
 (Run the following pip install commands to get these)
 
-pip install numpy
-pip install pandas
-pip install tensorflow
-pip install keras
-pip install flask
+`>pip install numpy`
+
+`>pip install pandas`
+
+`>pip install tensorflow`
+
+`>pip install keras`
+
+`>pip install flask`
 
 Running flask apps 
 
 To run a flask web app, navigate to the flask_apps directory and set the environment variable flask apps. You can do this in windows with the following command
 `set FLASK_APP=Health_Predict.py` or `set FLASK_APP=Guess_The_Real.py`
+
+On MacOS, the commands are: 
+`export FLASK_APP=Health_Predict.py` or `export FLASK_APP=Health_Predict.py`
 
 You can then run the app with the following command. 
 `flask run --host=0.0.0.0` 
