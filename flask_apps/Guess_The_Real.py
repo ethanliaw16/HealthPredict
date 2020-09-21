@@ -22,14 +22,14 @@ def generate_latent_points(latent_dimension, num_samples):
 
 def get_model():
     global model
-    model = load_model('../generator_model_066_074.h5')
+    model = load_model('../trained_models_generator_model_066_074.h5')
 
 print('Loading generator...')
 get_model()
 
 
 def generate_fake_data(num_samples_to_generate):
-    minmaxes = loadtxt('../diabetes_minmaxes.csv', delimiter=',')
+    minmaxes = loadtxt('../data/diabetes_minmaxes.csv', delimiter=',')
     generated_data = model.predict(generate_latent_points(3,num_samples_to_generate))
     rows,columns = generated_data.shape
     data_rescaled = np.zeros(generated_data.shape)
@@ -55,7 +55,7 @@ def generate_fake_data(num_samples_to_generate):
 @app.route('/home', methods=['GET'])
 def get_data_pair():
     print('Recieved GET request')
-    reals = loadtxt('../diabetes.csv', delimiter=',')
+    reals = loadtxt('../data/diabetes.csv', delimiter=',')
     fakes = generate_fake_data(768)
     random_real_point = reals[randrange(768)]
     random_fake_point = fakes[randrange(768)]
