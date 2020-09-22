@@ -4,7 +4,9 @@ from keras.layers import Dense, LeakyReLU, Dropout
 from keras.optimizers import Adam
 from numpy.random import randint, uniform, randn, rand
 from sklearn.preprocessing import minmax_scale
+from get_mins_maxes_from_data import get_data_min_max
 import numpy as np
+import pandas as pd
 import random
 
 #GAN configured for EHR data. This model aims to generate datapoints to mimic those of 
@@ -12,7 +14,7 @@ import random
 
 def discriminator():
     model = Sequential()
-    model.add(Dense(512, input_dim=9))
+    model.add(Dense(512, input_dim=15))
     model.add(LeakyReLU(alpha=.2))
     model.add(Dropout(.4))
     model.add(Dense(256, activation='relu'))
@@ -26,9 +28,13 @@ def discriminator():
 
 def generator(latent_dimension):
     model = Sequential()
-    model.add(Dense(256, input_dim=latent_dimension))
+    model.add(Dense(512, input_dim=latent_dimension))
     model.add(LeakyReLU(alpha=.2))
-    model.add(Dense(9, activation = 'relu'))
+    model.add(Dropout(.4))
+    model.add(Dense(256, activation='relu'))
+    model.add(LeakyReLU(alpha=.2))
+    model.add(Dropout(.4))
+    model.add(Dense(15, activation = 'relu'))
     opt = Adam(lr=.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
     return model
@@ -40,21 +46,39 @@ def generate_real_samples(dataset, num_samples):
     return X, reals
 
 def generate_fake_samples(num_samples):
-    pregnancies = rand(num_samples)
-    glucose = rand(num_samples,1)
+    height = rand(num_samples,1)
+    weight = rand(num_samples,1)
+    s_blood_pressure = rand(num_samples,1)
     d_blood_pressure = rand(num_samples,1)
-    tri_skin_fold_thickness = rand(num_samples,1)
-    insulin = rand(num_samples,1)
-    
     bmi = rand(num_samples,1)
-    diabetes_pedigree = rand(num_samples,1)
-    age = rand(num_samples,1)
+    birth_year = rand(num_samples,1)
     possible_outcomes = [0,1]
-    generated_outcomes = []
+    gender_M = []
+    L2_HypertensionEssential = []
+    L2_MixedHyperlipidemia = []
+    L2_ChronicRenalFailure = []
+    L2_Alcohol = []
+    L2_Hypercholesterolemia = []
+    L2_AtherosclerosisCoronary = []
+    L2_HyperlipOther = []
+    #Smoke_0 = []
+    #Smoke_2 = []
+    #Smoke_15 = []
+    #Smoke_20 = []
+    #Smoke_30 = []
+    #Smoke_40 = []
     for i in range(num_samples):
-        generated_outcomes.append(random.choice(possible_outcomes))
+        gender_M.append(random.choice(possible_outcomes))
+        L2_HypertensionEssential.append(random.choice(possible_outcomes))
+        L2_MixedHyperlipidemia.append(random.choice(possible_outcomes))
+        L2_ChronicRenalFailure.append(random.choice(possible_outcomes))
+        L2_Alcohol.append(random.choice(possible_outcomes))
+        L2_Hypercholesterolemia.append(random.choice(possible_outcomes))
+        L2_AtherosclerosisCoronary.append(random.choice(possible_outcomes))
+        L2_HyperlipOther.append(random.choice(possible_outcomes))
+    dm_indicator = np.ones((num_samples, 1))
     fake_labels = np.zeros((num_samples,1))
-    return np.column_stack((pregnancies,glucose,d_blood_pressure,tri_skin_fold_thickness,insulin,bmi,diabetes_pedigree,age,generated_outcomes)),fake_labels
+    return np.column_stack((height,weight,s_blood_pressure,d_blood_pressure,bmi,birth_year, gender_M, L2_HypertensionEssential, L2_MixedHyperlipidemia, L2_ChronicRenalFailure, L2_Alcohol, L2_Hypercholesterolemia, L2_AtherosclerosisCoronary, L2_HyperlipOther, dm_indicator)),fake_labels
 
 def generate_fake_samples_with_model(generator_model, latent_dimension, num_samples):
     x_input = generate_latent_points(latent_dimension, num_samples)
@@ -67,7 +91,7 @@ def generate_latent_points(latent_dimension, num_samples):
     x_input = x_input.reshape(num_samples, latent_dimension)
     return x_input
 
-def train_discriminator(model, dataset, num_iterations=100, num_batches=128):
+def train_discriminator(model, dataset, num_iterations=150, num_batches=128):
     half_batch = int(num_batches/2)
     for i in range (num_iterations):
         # get randomly selected 'real' samples
@@ -75,7 +99,7 @@ def train_discriminator(model, dataset, num_iterations=100, num_batches=128):
         # update discriminator on real samples
         _, real_acc = model.train_on_batch(X_real, y_real)
 		# generate 'fake' examples
-        X_fake, y_fake = generate_fake_samples(half_batch, False)
+        X_fake, y_fake = generate_fake_samples(half_batch)
 		# update discriminator on fake samples
         _, fake_acc = model.train_on_batch(X_fake, y_fake)
 		# summarize performance
@@ -103,7 +127,7 @@ discriminator_model,
 gan_model, 
 dataset, 
 latent_dimension, 
-num_epochs=1500, 
+num_epochs=100, 
 batch_size=32):
     batches_per_epoch = int(dataset.shape[0] / batch_size)
     half_batch = int(batch_size / 2)
@@ -122,47 +146,46 @@ batch_size=32):
             if(i + 1) % 100 == 0:
                 print('Summary----------------------------------------')
                 real_acc, fake_acc = performance_summary(i, generator_model, discriminator_model, scaled_dataset, latent_dimension)
-                if real_acc > 65 and fake_acc > 65:
-                    filename = '../generator_model_%03d_%03d.h5' % (real_acc, fake_acc)
+                if real_acc > 70 and fake_acc > 70 and fake_acc < 90:
+                    filename = './trained_models/ehr_generator_model_%03d_%03d.h5' % (real_acc, fake_acc)
                     print('saving ', filename)
                     generator_model.save(filename)
                 
 
-def get_data_min_max(dataset):
-    _,num_columns = dataset.shape
-    data_minmaxes = []
-    for i in range(num_columns):
-        column = dataset[:,i]
-        column_min = column.min()
-        column_max = column.max()
-        if i != 0: 
-            column = column[np.nonzero(column)]
-            column_min = column.min()
-        #print('Column ', i, ' min: ', column_min, ' max: ', column_max)
-        data_minmaxes.append([column_min,column_max])
-    return data_minmaxes
-
 # load the dataset
-dataset = loadtxt('diabetes.csv', delimiter=',')
+dataset = pd.read_csv('./data/minority_ehr_encoded.csv', delimiter=',')
 # split into input (X) and output (y) variables
-X = dataset[:,0:8]
-y = dataset[:,8]
-y = np.reshape(y,(np.size(y), 1))
-x_scaled = minmax_scale(dataset[:,0:8])
-scaled_dataset = np.hstack((x_scaled,y))
-print('First 5 scaled rows: ')
-print(scaled_dataset[:5])
+X = dataset[[ 
+'YearOfBirth', 
+'HeightMedian', 
+'WeightMedian', 
+'BMIMedian', 
+'SystolicBPMedian', 
+'DiastolicBPMedian',
+'Gender_M',
+'L2_HypertensionEssential', 
+'L2_MixedHyperlipidemia', 
+'L2_ChronicRenalFailure', 
+'L2_Alcohol', 
+'L2_Hypercholesterolemia', 
+'L2_AtherosclerosisCoronary',
+'L2_HyperlipOther']]
+y = dataset['DMIndicator']
+#y = np.reshape(y,(np.size(y), 1))
+data_minmaxes = np.asarray(get_data_min_max(X))
+np.set_printoptions(suppress=True)
+np.savetxt('./data/ehr_minmaxes.csv', data_minmaxes, delimiter=',', fmt='%f')
+
+scaled_dataset = np.column_stack((minmax_scale(X),y))
+print('First 5 scaled rows: ', scaled_dataset[:5])
 
 print('Scaled', scaled_dataset.shape)
-
-print('Train', x_scaled.shape, y.shape)
-print('Test', X.shape, y.shape)
 
 discriminator_model = discriminator()
 
 train_discriminator(discriminator_model,scaled_dataset)
 
-latent_dimension = 3
+latent_dimension = 15
 generator_model = generator(latent_dimension)
 
 gan_model = build_gan(generator_model, discriminator_model)
@@ -172,12 +195,11 @@ gan_model.summary()
 mins_and_maxes = get_data_min_max(X)
 
 train_complete_model(generator_model, discriminator_model, gan_model, scaled_dataset, latent_dimension)
-
-#print(generate_fake_samples_with_model(generator_model,50,10))
-
+print('10 fakes from model', generate_fake_samples_with_model(generator_model,15,10))
 #train_discriminator(discriminator_model, dataset)
+fakes = generate_fake_samples(10)
+reals = generate_real_samples(minmax_scale(X),10)
+print('first 4 reals', scaled_dataset[:4])
 
-#fakes = generate_fake_samples(10,False)
-#reals = generate_real_samples(X,10)
 
 

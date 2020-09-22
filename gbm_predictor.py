@@ -88,8 +88,8 @@ params = {
     'metric': {'auc'},
     'num_leaves': 31,
     'learning_rate': 0.05,
-    'feature_fraction': 0.5,
-    'bagging_fraction': 0.5,
+    'feature_fraction': 0.8,
+    'bagging_fraction': 0.8,
     'bagging_freq': 1,
     'verbose': 0
 }

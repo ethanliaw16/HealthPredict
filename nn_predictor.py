@@ -59,6 +59,8 @@ data['L2_HyperlipOther'] = data['L2_HyperlipOther'].clip(0,1)
 actual_diabetics = data.loc[data['DMIndicator']==1]
 actual_nondiabetics = data.loc[data['DMIndicator']==0]
 
+actual_diabetics.to_csv('./data/minority_ehr_encoded.csv', index=False)
+
 X_dataframe = data[[
 'Gender_M', 
 'Gender_F', 
