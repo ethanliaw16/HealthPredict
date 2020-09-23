@@ -14,6 +14,16 @@ def get_data_min_max(dataset):
         data_minmaxes.append([column_min,column_max])
     return data_minmaxes
 
+def map_gender_column(row):
+    if(row['Gender_M'] == 1):
+        return 'M'
+    return 'F'
+
+def map_female_column(row):
+    if(row['Gender_M'] == 1):
+        return 0
+    return 1
+
 def generate_latent_points(latent_dimension, num_samples):
     x_input = randn(latent_dimension * num_samples)
     x_input = x_input.reshape(num_samples, latent_dimension)
@@ -48,5 +58,21 @@ X_rescaled[:,14] = 1
 np.set_printoptions(suppress=True)
 print(X)
 print('First 10 columns of generated data: ', X_rescaled[:10])
-
-#np.savetxt('generated_data.csv', X_rescaled, fmt='%i,%i,%i,%i,%i,%1.1f,%1.3f,%i,%i', delimiter=',', newline='\n')
+X_rescaled_df = pd.DataFrame(data=X_rescaled, columns=['YearOfBirth', 
+'HeightMedian', 
+'WeightMedian', 
+'BMIMedian', 
+'SystolicBPMedian', 
+'DiastolicBPMedian',
+'Gender_M',
+'L2_HypertensionEssential', 
+'L2_MixedHyperlipidemia', 
+'L2_ChronicRenalFailure', 
+'L2_Alcohol', 
+'L2_Hypercholesterolemia', 
+'L2_AtherosclerosisCoronary',
+'L2_HyperlipOther',
+'DMIndicator'])
+X_rescaled_df['Gender'] = X_rescaled_df.apply(lambda row: map_gender_column(row), axis = 1)
+X_rescaled_df['Gender_F'] = X_rescaled_df.apply(lambda row: map_female_column(row), axis = 1)
+X_rescaled_df.to_csv('./data/ehr_generated_data.csv', index=False)

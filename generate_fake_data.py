@@ -43,4 +43,5 @@ for j in range(columns):
 np.set_printoptions(suppress=True)
 print(X)
 print('First 10 columns of generated data: ', X_rescaled[:10])
+
 np.savetxt('generated_data.csv', X_rescaled, fmt='%i,%i,%i,%i,%i,%1.1f,%1.3f,%i,%i', delimiter=',', newline='\n')
