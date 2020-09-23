@@ -106,15 +106,18 @@ print('Saving model...')
 # save model to file
 #gbm.save_model('model.txt')
 
-filename = './trained_models_gbm_predictor.txt'
+filename = './trained_models/gbm_predictor.txt'
 pickle.dump(gbm, open(filename,'wb'))
 
 loaded_gbm = pickle.load(open(filename, 'rb'))
 print('Starting predicting...')
 # predict
-y_pred = loaded_gbm.predict(test_X, num_iteration=gbm.best_iteration)
+y_pred = loaded_gbm.predict(test_X, num_iteration=loaded_gbm.best_iteration)
 y_rounded = np.rint(y_pred)
 print(y_rounded[:10])
+default_input = [[1970, 67, 180, 28.2, 120, 80, 1, 1, 0, 0, 0, 1, 0, 0]]
+single_pred = loaded_gbm.predict(default_input, num_iteration=loaded_gbm.best_iteration)
+print('Chance of type 2 Diabetes: %03f' % (single_pred[0]))
 #Y_pred = np.argmax(y_pred, axis=0)
 # eval
 #print('The rmse of prediction is:', mean_squared_error(test_y, y_pred) ** 0.5)
