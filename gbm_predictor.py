@@ -1,6 +1,7 @@
 import lightgbm as lgb
 import pandas as pd
 import numpy as np
+import pickle
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
@@ -105,12 +106,18 @@ print('Saving model...')
 # save model to file
 #gbm.save_model('model.txt')
 
+filename = './trained_models_gbm_predictor.txt'
+pickle.dump(gbm, open(filename,'wb'))
+
+loaded_gbm = pickle.load(open(filename, 'rb'))
 print('Starting predicting...')
 # predict
-y_pred = gbm.predict(test_X, num_iteration=gbm.best_iteration)
+y_pred = loaded_gbm.predict(test_X, num_iteration=gbm.best_iteration)
 y_rounded = np.rint(y_pred)
 print(y_rounded[:10])
 #Y_pred = np.argmax(y_pred, axis=0)
 # eval
 #print('The rmse of prediction is:', mean_squared_error(test_y, y_pred) ** 0.5)
 print('Confusion Matrix\n',confusion_matrix(test_y,y_rounded))
+
+
