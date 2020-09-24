@@ -24,11 +24,7 @@ def predictor():
     model.add(Dense(12, activation='relu'))
     model.add(LeakyReLU(alpha=.2))
     model.add(Dropout(.4))
-    initial_bias = np.log([1903/8044])
-    output_bias = tf.keras.initializers.Constant(initial_bias)
-    print(output_bias)
     model.add(Dense(1, activation='sigmoid'))
-    
     opt = Adam(lr=0.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
     return model
