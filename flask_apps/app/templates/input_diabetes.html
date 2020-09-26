@@ -6,8 +6,38 @@
   <div class="input">
     <form class="form" #f="ngForm" action='' method='POST'>
       {{ form.hidden_tag() }}
+
+      <div class="age-div">
+      <div class="age">
+          <label for="age">Age</label>
+        </div>
+        {% if form.age.errors %}
+        {{ form.age(class="input-boxes") }}
+        {% for error in form.age.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.age(class="input-boxes") }}
+        {% endif %}
+      </div>
+
+      <div class="gender-div">
+      <div class="gender">
+          <label for="gender">Gender*</label>
+        </div>
+        {% if form.gender.errors %}
+        {{ form.gender(class="input-boxes") }}
+        {% for error in form.gender.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.gender(class="input-boxes") }}
+        {% endif %}
+      </div>
+
+      <div class="height-div">
       <div class="height">
-        <label for="height">*Height (Inches)</label>
+        <label for="height">Height*</label>
       </div>
       {% if form.height.errors %}
       {{ form.height(class="input-boxes") }}
@@ -17,9 +47,11 @@
       {% else %}
       {{ form.height(class="input-boxes") }}
       {% endif %}
+    </div>
 
+    <div class="weight-div">
       <div class="weight">
-        <label for="weight">*Weight (Pounds)</label>
+        <label for="weight">Weight*</label>
       </div>
       {% if form.weight.errors %}
       {{ form.weight(class="input-boxes") }}
@@ -29,31 +61,63 @@
       {% else %}
       {{ form.weight(class="input-boxes") }}
       {% endif %}
+    </div>
 
-      <div class="age">
-        <label for="age">*Age (Years)</label>
+    <div class="sys_bp-div">
+      <div class="sys_bp">
+        <label for="sys_bp">Systolic Blood Pressure*</label>
       </div>
-      {% if form.age.errors %}
-      {{ form.age(class="input-boxes") }}
-      {% for error in form.age.errors %}
+      {% if form.sys_bp.errors %}
+      {{ form.sys_bp(class="input-boxes") }}
+      {% for error in form.sys_bp.errors %}
       <div class="error">{{ error }}</div>
       {% endfor %}
       {% else %}
-      {{ form.age(class="input-boxes") }}
+      {{ form.sys_bp(class="input-boxes") }}
       {% endif %}
+    </div>
 
-      <div class="glucose">
-        <label for="glucose">*Glucose Level (Units)</label>
+    <div class="dias_bp-div">
+      <div class="dias_bp">
+          <label for="dias_bp">Diastolic Blood Pressure*</label>
+        </div>
+        {% if form.dias_bp.errors %}
+        {{ form.dias_bp(class="input-boxes") }}
+        {% for error in form.dias_bp.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.dias_bp(class="input-boxes") }}
+        {% endif %}
       </div>
-      {% if form.glucose.errors %}
-      {{ form.glucose(class="input-boxes") }}
-      {% for error in form.glucose.errors %}
-      <div class="error">{{ error }}</div>
-      {% endfor %}
-      {% else %}
-      {{ form.glucose(class="input-boxes") }}
-      {% endif %}
-      
+
+      <div class="smoking_status-div">
+      <div class="smoking_status">
+          <label for="smoking_status">Smoking Status:</label>
+        </div>
+        {% if form.smoking_status.errors %}
+        {{ form.smoking_status(class="input-boxes-large") }}
+        {% for error in form.smoking_status.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.smoking_status(class="input-boxes-large") }}
+        {% endif %}  
+      </div>
+
+      <div class="diagnoses_div">
+      <div class="diagnoses">
+          <label for="diagnoses">Diagnosed with:</label>
+        </div>
+        {% if form.diagnoses.errors %}
+        {{ form.diagnoses(class="input-boxes-large") }}
+        {% for error in form.diagnoses.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.diagnoses(class="input-boxes-large") }}
+        {% endif %}    
+      </div>
 
       <div class="required">
         *denotes required fields. 
