@@ -11,6 +11,10 @@ html {
   background-color: #F5F5F5;
 }
 
+form {
+  height: 100%;
+}
+
 .patient-info {
   margin-top: 5%;
   padding-left: 5%;
@@ -29,12 +33,27 @@ html {
   font-weight: 400;
 }
 
-.height, .weight, .age, .glucose {
+.height, .weight, .age, .gender, .sys_bp, .dias_bp{
     color: rgb(113,111,109);
     font-size: 14px;
     width: 200px;
-    display: inline-block;
+    display: block;
     margin-bottom: 5px;
+  }
+
+  .age-div, .gender-div, .height-div, .weight-div, .sys_bp-div, .dias_bp-div {
+    display: inline-block;
+    margin-right: 2%;
+    margin-top: 1%;
+  }
+
+  .smoking_status-div, .diagnoses_div {
+    display: inline-block;
+    margin-top: 2%;
+  }
+
+  .diagnoses_div {
+    margin-left: 13.1%;
   }
 
 label {
@@ -51,20 +70,21 @@ label {
 
 input[type="text"] {
     color: rgb(113,111,109);
-
+   
   }
 
 .input {
-    padding-left: 2%;
+    margin-left: 5%;
   }
 
  
 .input-boxes {
-  width: 181px;
+  width: 198px;
   height: 39px;
   background: #E4E0E0;
   border: 1px solid #858585;
   box-sizing: border-box;
+  display: inline-block;
     /* margin-left: 1%;
     display: inline-block;
     margin-right: 60%;  
@@ -77,16 +97,24 @@ input[type="text"] {
     display: inline-block; */
 }
 
+.input-boxes-large {
+  width: 500px;
+  height: 180px;
+
+}
+
+li {
+  padding-top: 1%;
+}
+
 .required {
-    float: left;
-    padding-top: 25px;
-    padding-left: 2%;
-    font-size: 12px;
-    color: gray;
+    font-size: 20px;
+    
+    display: block;
 
   }
 
-a {
+/* a {
     text-decoration: none;
     color: #5DBFE2;
     font-size: 16px;
@@ -99,9 +127,22 @@ a {
   .bar {
     background-color:rgb(233, 231, 231);
 
-  }
+  } */
+
+.double-check {
+  font-size: 20px;
+  margin-top: 1%;
+  margin-bottom: 2%;
+}
+
+.submit_data_div {
+  height: 50px;
+  
+}
 
 .submit_data {
+    float: right;
+    margin-right: 9%;
     width: 181px;
     height: 39px;
     font-size: 24px;
