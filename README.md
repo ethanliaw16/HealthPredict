@@ -22,11 +22,11 @@ To run a flask web app, navigate to the flask_apps directory and set the environ
 `set FLASK_APP=Health_Predict.py` or `set FLASK_APP=Guess_The_Real.py`
 
 On MacOS, the commands are: 
-`export FLASK_APP=Health_Predict.py` or `export FLASK_APP=Health_Predict.py`
+`export FLASK_APP=Health_Predict.py` or `export FLASK_APP=Guess_The_Real.py`
 
 You can then run the app with the following command. 
 `flask run --host=0.0.0.0` 
 
-You can then reach the app by going to http:/localhost:5000/static/home.html or http:/localhost:5000/static/guessthereal.html. 
+You can then reach the app by going to http:/localhost:5000/static/homepage.html or http:/localhost:5000/static/guessthereal.html. 
 You can also replace localhost with your computer's local ip address. This will probably changed for our actual deployment, but for development purposes it will probably work for now.
 
