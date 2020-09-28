@@ -26,7 +26,7 @@ def inputDiabetesInfo():
     # if form.validate_on_submit():
         # send to GAN
     default_input = [1970, 67, 180, 28.2, 120, 80, 1, 1, 0, 0, 0, 1, 0, 0]
-    gbm_predictor = pickle.load(open('../../trained_models/gbm_predictor.txt', 'rb'))
+    gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
 
     outcome = gbm_predictor.predict(default_input, num_iteration=gbm_predictor.best_iteration)
     print('Chance of type 2 Diabetes: %03d' % (outcome))
