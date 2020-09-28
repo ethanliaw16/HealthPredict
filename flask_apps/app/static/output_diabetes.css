@@ -7,15 +7,39 @@
     overflow: auto;
 }
 
-.title {
-  position: absolute;
-  width: 533px;
-  height: 42px;
-  left: 49px;
-  top: 31px;
+html {
+  background-color: #F5F5F5;
+}
 
+.title {
+  margin-top: 5%;
+  padding-left: 5%;
+  display: inline-block;
+  padding-right: 10px;
+  margin-bottom: 0;
+  font-size: 40px;
   font-weight: 200;
-  font-size: 36px;
-  line-height: 42px;
+}
+
+.diabetes {
+  margin-top: 5%;
+  display: inline-block;
+  margin-bottom: 0;
+  font-size: 40px;
+  font-weight: 400;
+
+}
+
+.prediction {
+  position: absolute;
+  width: 622px;
+  height: 193px;
+  left: 49px;
+  top: 116px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 33px;
   color: #000000;
 }
