@@ -2,6 +2,16 @@ from numpy import loadtxt
 import numpy as np
 import sys
 
+def get_data_min_max(dataset):
+    _,num_columns = dataset.shape
+    data_minmaxes = []
+    for (columnName, columnData) in dataset.iteritems():
+        column_min = columnData.min()
+        column_max = columnData.max()
+        #print('Column ', i, ' min: ', column_min, ' max: ', column_max)
+        data_minmaxes.append([column_min,column_max])
+    return data_minmaxes
+
 filename = sys.argv[1]
 dataset = loadtxt(filename, delimiter=',')
 
