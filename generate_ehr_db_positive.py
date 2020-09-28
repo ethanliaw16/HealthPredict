@@ -75,4 +75,6 @@ X_rescaled_df = pd.DataFrame(data=X_rescaled, columns=['YearOfBirth',
 'DMIndicator'])
 X_rescaled_df['Gender'] = X_rescaled_df.apply(lambda row: map_gender_column(row), axis = 1)
 X_rescaled_df['Gender_F'] = X_rescaled_df.apply(lambda row: map_female_column(row), axis = 1)
-X_rescaled_df.to_csv('./data/ehr_generated_data.csv', index=False)
+print(X_rescaled_df['WeightMedian'].value_counts())
+print(X_rescaled_df['HeightMedian'].value_counts())
+#X_rescaled_df.to_csv('./data/ehr_generated_data.csv', index=False)
