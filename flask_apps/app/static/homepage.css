@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
 
+html {
+  background-color: #F5F5F5;
+}
+
 h1 {
   position: absolute;
   width: 326px;
@@ -37,21 +41,15 @@ button {
 
 .diabetes-button {
   position: absolute;
-  left: calc(50% - 183px/2 - 247px);
-  top: 210px;
+  left: calc(50% - 183px/2 - 100px);
+  top: 200px;
 
 }
 
 .heart-diease-button {
   position: absolute;
-  left: calc(50% - 183px/2);
-  top: 210px;
-}
-
-.both-button {
-  position: absolute;
-  left: calc(50% - 183px/2 + 246px);
-  top: 210px;
+  left: calc(50% - 183px/2 + 121px);
+  top: 200px;
 }
 
 .about {
