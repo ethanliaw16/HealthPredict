@@ -7,9 +7,10 @@
     <form class="form" #f="ngForm" action='' method='POST'>
       {{ form.hidden_tag() }}
 
+      <div class="personal-div">
       <div class="age-div">
       <div class="age">
-          <label for="age">Age</label>
+          <label for="age">Age (Years)</label>
         </div>
         {% if form.age.errors %}
         {{ form.age(class="input-boxes") }}
@@ -37,7 +38,7 @@
 
       <div class="height-div">
       <div class="height">
-        <label for="height">Height*</label>
+        <label for="height">Height (inches)*</label>
       </div>
       {% if form.height.errors %}
       {{ form.height(class="input-boxes") }}
@@ -51,7 +52,7 @@
 
     <div class="weight-div">
       <div class="weight">
-        <label for="weight">Weight*</label>
+        <label for="weight">Weight (lbs)*</label>
       </div>
       {% if form.weight.errors %}
       {{ form.weight(class="input-boxes") }}
@@ -65,7 +66,7 @@
 
     <div class="sys_bp-div">
       <div class="sys_bp">
-        <label for="sys_bp">Systolic Blood Pressure*</label>
+        <label for="sys_bp">Systolic Blood Pressure (mmHg)*</label>
       </div>
       {% if form.sys_bp.errors %}
       {{ form.sys_bp(class="input-boxes") }}
@@ -79,7 +80,7 @@
 
     <div class="dias_bp-div">
       <div class="dias_bp">
-          <label for="dias_bp">Diastolic Blood Pressure*</label>
+          <label for="dias_bp">Diastolic Blood Pressure (mmHg)*</label>
         </div>
         {% if form.dias_bp.errors %}
         {{ form.dias_bp(class="input-boxes") }}
@@ -90,10 +91,27 @@
         {{ form.dias_bp(class="input-boxes") }}
         {% endif %}
       </div>
+    
+    </div>
 
+<div class="smoking-div">
+      <div class="smoking_history-div">
+        <div class="smoking_history">
+            <label for="smoking_history">Smoking History:</label>
+          </div>
+          {% if form.smoking_history.errors %}
+          {{ form.smoking_history(class="input-boxes-large") }}
+          {% for error in form.smoking_history.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.smoking_history(class="input-boxes-large") }}
+          {% endif %}  
+        </div>
+  
       <div class="smoking_status-div">
       <div class="smoking_status">
-          <label for="smoking_status">Smoking Status:</label>
+          <label for="smoking_status">Current Smoking Status:</label>
         </div>
         {% if form.smoking_status.errors %}
         {{ form.smoking_status(class="input-boxes-large") }}
@@ -104,20 +122,98 @@
         {{ form.smoking_status(class="input-boxes-large") }}
         {% endif %}  
       </div>
+    
+    </div>
 
-      <div class="diagnoses_div">
-      <div class="diagnoses">
-          <label for="diagnoses">Diagnosed with:</label>
+      <div class="diagnoses-div">
+        <div class="diagnoses">Diagnosed with:</div> 
+     
+
+      <div class="hypertension-div">
+          {% if form.hypertension.errors %}
+          {{ form.hypertension(class="input-boxes") }}
+          {% for error in form.hypertension.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.hypertension(class="input-boxes") }}
+          {% endif %}  
+          <div class="hypertension">
+            <label for="hypertension" class="hypertension-label">Hypertension*</label>
+          </div>
+        </div>  
+
+        <div class="high_chol-div">
+            {% if form.high_chol.errors %}
+            {{ form.high_chol(class="input-boxes") }}
+            {% for error in form.high_chol.errors %}
+            <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% else %}
+            {{ form.high_chol(class="input-boxes") }}
+            {% endif %}  
+            <div class="high_chol">
+              <label for="high_chol">Mixed Hyperlipidemia (High Cholestrol)*</label>
+            </div>
+          </div> 
+
+          <div class="renal_failure-div">
+            {% if form.renal_failure.errors %}
+           {{ form.renal_failure(class="input-boxes") }}
+            {% for error in form.renal_failure.errors %}
+            <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% else %}
+            {{ form.renal_failure(class="input-boxes") }}
+            {% endif %}  
+            <div class="renal_failure">
+              <label for="renal_failure">Chronic Renal Failure</label>
+            </div>
+          </div> 
+
+          <div class="alc_dependence-div">
+            {% if form.alc_dependence.errors %}
+           {{ form.alc_dependence(class="input-boxes") }}
+            {% for error in form.alc_dependence.errors %}
+            <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% else %}
+            {{ form.alc_dependence(class="input-boxes") }}
+            {% endif %}  
+            <div class="alc_dependence">
+              <label for="alc_dependence">Alcohol Dependence</label>
+            </div>
+          </div> 
+
+          <div class="hyperchol-div">
+            {% if form.hyperchol.errors %}
+           {{ form.hyperchol(class="input-boxes") }}
+            {% for error in form.hyperchol.errors %}
+            <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% else %}
+            {{ form.hyperchol(class="input-boxes") }}
+            {% endif %}  
+            <div class="hyperchol">
+              <label for="hyperchol">Hypercholesterolemia</label>
+            </div>
+          </div> 
+
+          <div class="coronary_artery-div">
+            {% if form.coronary_artery.errors %}
+           {{ form.coronary_artery(class="input-boxes") }}
+            {% for error in form.coronary_artery.errors %}
+            <div class="error">{{ error }}</div>
+            {% endfor %}
+            {% else %}
+            {{ form.coronary_artery(class="input-boxes") }}
+            {% endif %}  
+            <div class="coronary_artery">
+              <label for="coronary_artery">Coronary Atherosclerosis (Coronary Artery Disease)</label>
+            </div>
+          </div> 
+
         </div>
-        {% if form.diagnoses.errors %}
-        {{ form.diagnoses(class="input-boxes-large") }}
-        {% for error in form.diagnoses.errors %}
-        <div class="error">{{ error }}</div>
-        {% endfor %}
-        {% else %}
-        {{ form.diagnoses(class="input-boxes-large") }}
-        {% endif %}    
-      </div>
 
       <div class="required">
         *denotes required fields. 
