@@ -47,19 +47,52 @@ form {
     margin-top: 1%;
   }
 
-  .smoking_status-div, .diagnoses_div {
+  .smoking-div, .diagnoses-div {
     display: inline-block;
-    margin-top: 2%;
   }
 
-  .diagnoses_div {
-    margin-left: 13.1%;
+  .smoking-div {
+    width: 45%;
+  }
+
+  .smoking_status-div, .smoking_history-div {
+    /* display: block; */
+    margin-left: 0px;
+  }
+
+  .smoking_history-div {
+    margin-top: 4%;
+  }
+
+  .personal-div {
+    width: 100%;
+  }
+
+  .diagnoses-div {
+    width: 50%;
+    margin-left: 1%;
+    margin-top: 0;
+    margin-bottom: 2%;
   }
 
 label {
   font-weight: 300;
   font-size: 18px;
-  
+}
+
+.diagnoses {
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.hypertension, .high_chol, .renal_failure, .alc_dependence, .hyperchol, .coronary_artery {
+  display: inline;
+  margin-left: 1%;
+}
+
+.hypertension-div, .high_chol-div, .renal_failure-div, .alc_dependence-div, .hyperchol-div, .coronary_artery-div {
+  margin-top: 1%;
+  width: 700px;
 }
 
 .error {
@@ -99,7 +132,7 @@ input[type="text"] {
 
 .input-boxes-large {
   width: 500px;
-  height: 180px;
+  height: 120px;
 
 }
 
