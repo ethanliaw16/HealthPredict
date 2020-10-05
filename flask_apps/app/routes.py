@@ -30,6 +30,10 @@ def inputDiabetesInfo():
 
     outcome = gbm_predictor.predict(default_input, num_iteration=gbm_predictor.best_iteration)
     print('Chance of type 2 Diabetes: ', outcome[0])
-    
+
         # return redirect(url_for('home')) this should go to output page instead
     return render_template('input_diabetes.html', title='Diabetes Inputs', form=form)
+
+@app.route('/diabetesoutput')
+def output_diabetes():
+    return render_template('output_diabetes.html')
