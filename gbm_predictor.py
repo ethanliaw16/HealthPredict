@@ -1,14 +1,18 @@
 import lightgbm as lgb
+from lightgbm import LGBMClassifier
 import pandas as pd
 import numpy as np
 import pickle
-from sklearn.metrics import mean_squared_error, average_precision_score, plot_precision_recall_curve
+from sklearn.metrics import mean_squared_error, average_precision_score,precision_recall_curve, plot_precision_recall_curve, roc_curve
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
+from matplotlib import pyplot as plt
+from ctgan import CTGANSynthesizer
 
 data = pd.read_csv('./data/all_data_important_columns.csv')
 synthesized_data = pd.read_csv('./data/ehr_generated_data_with_smoking.csv')
 data.rename(columns={'Smoker.x': 'Smoke'},inplace = True)
+
 encoded_gender = pd.get_dummies(data.Gender, prefix='Gender')
 encoded_gender.reset_index(drop=True)
 
@@ -129,8 +133,8 @@ complete_y_with_synthesized = pd.concat([y_nondiabetic_small, y_diabetic, synthe
 
 train_X,test_X,train_y,test_y = train_test_split(complete_X, complete_y, random_state=42)
 print('shape of training data combined with synthesized data ', complete_X_with_synthesized.shape)
-train_X = pd.concat([train_X, Synthesized_X])
-train_y = pd.concat([train_y, synthesized_y])
+#train_X = pd.concat([train_X, Synthesized_X])
+#train_y = pd.concat([train_y, synthesized_y])
 print('shape of training labels combined with synthesized labels ', complete_y_with_synthesized.shape)
 
 
@@ -157,6 +161,46 @@ gbm = lgb.train(params,
                 num_boost_round=20,
                 valid_sets=lgb_eval)
 
+gbm_classifier = LGBMClassifier(n_estimators=90, 
+                          random_state = 94, 
+                          max_depth=4,
+                          num_leaves=31,
+                          objective='binary',
+                          metrics ='auc')
+
+gbm_classifier_synthesized = LGBMClassifier(n_estimators=90, 
+                          random_state = 94, 
+                          max_depth=4,
+                          num_leaves=31,
+                          objective='binary',
+                          metrics ='auc')
+
+#Create separate training set containing gan-synthesized datapoints
+train_X_synthesized = pd.concat([train_X, Synthesized_X])
+train_y_synthesized = pd.concat([train_y, synthesized_y])
+
+#train/test one classifier on original data and the other on syntheszied data, test both with original unsynthesized test set
+classifier_model = gbm_classifier.fit(train_X, train_y)
+classifier_probs = classifier_model.predict_proba(test_X)[:,1]
+
+classifier_model_synthesized = gbm_classifier_synthesized.fit(train_X_synthesized,train_y_synthesized)
+classifier_probs_synthesized = classifier_model_synthesized.predict_proba(test_X)[:,1]
+
+
+precision, recall, thresholds = precision_recall_curve(test_y, classifier_probs)
+precision_s, recall_s, thresholds_s = precision_recall_curve(test_y, classifier_probs_synthesized)
+plt.plot(recall, precision, label='Original Training Data Only')
+plt.plot(recall_s,precision_s, label='Original and Synthesized Data Combined')
+plt.legend()
+plt.title('Precision Recall Curve of Model using only original Data vs Original and Synthesized')
+plt.show(block=True)
+
+fpr,tpr,threshold = roc_curve(test_y, classifier_probs)
+fpr_s, tpr_s, threshold = roc_curve(test_y, classifier_probs_synthesized)
+plt.plot(fpr,tpr, label='Original Training Data Only')
+plt.plot(fpr_s, tpr_s, label='Original and Synthesized Data Combined')
+plt.legend()
+plt.show(block=True)
 print('Saving model...')
 # save model to file
 #gbm.save_model('model.txt')
@@ -177,6 +221,6 @@ print('Chance of type 2 Diabetes: %03f' % (single_pred[0]))
 # eval
 #print('The rmse of prediction is:', mean_squared_error(test_y, y_pred) ** 0.5)
 print('Confusion Matrix\n',confusion_matrix(test_y,y_rounded))
-print('Average Precision Recall ', average_precision_score(test_y, y_pred))
-plot_precision_recall_curve(loaded_gbm, test_X, test_y)
+#print('Average Precision Recall ', average_precision_score(test_y, y_pred))
+plot_precision_recall_curve(classifier_model, test_X, test_y)
 
