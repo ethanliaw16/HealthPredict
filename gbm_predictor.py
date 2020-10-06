@@ -2,7 +2,7 @@ import lightgbm as lgb
 import pandas as pd
 import numpy as np
 import pickle
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, average_precision_score, plot_precision_recall_curve
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 
@@ -177,5 +177,6 @@ print('Chance of type 2 Diabetes: %03f' % (single_pred[0]))
 # eval
 #print('The rmse of prediction is:', mean_squared_error(test_y, y_pred) ** 0.5)
 print('Confusion Matrix\n',confusion_matrix(test_y,y_rounded))
-
+print('Average Precision Recall ', average_precision_score(test_y, y_pred))
+plot_precision_recall_curve(loaded_gbm, test_X, test_y)
 
