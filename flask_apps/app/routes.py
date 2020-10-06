@@ -23,9 +23,14 @@ def about():
 @app.route("/diabetesinputs", methods=['GET', 'POST'])
 def inputDiabetesInfo():
     form = DiabetesInputsForm()
-    # if form.validate_on_submit():
+    if form.validate_on_submit():
+        print('age ', form.age.data)
+        print('gender ', form.gender.data)
+        print('height ', form.height.data)
+        print('smoking history ', form.smoking_history.data)
+        print('smoking status ', form.smoking_status.data)
         # send to GAN
-        # return redirect(url_for('home')) this should go to output page instead
+        # return redirect(url_for('diabetesoutput')) this should go to output page instead
     return render_template('input_diabetes.html', title='Diabetes Inputs', form=form)
 
 @app.route('/diabetesoutput')
