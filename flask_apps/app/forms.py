@@ -43,7 +43,7 @@ class HeartDiseaseInputsForm (FlaskForm):
     ekg = SelectField('Resting Electrocardiographic Results', choices=[(1, 'Left Ventricular Hypertrophy'), (2, 'Normal'), (3, 'Having ST-T wave abnormality')], validators=[DataRequired()])
     heart_rate = IntegerField('Maximum Heart Rate Achieved During Exercise', validators=[DataRequired()])
     exercise_angina = SelectField('Exercised-induced Angina', choices=[(1, 'Yes'), (0, 'No')], validators=[DataRequired()])
-    st_depression = IntegerField('ST Depression Induced by Exercise Relative to Rest', validators=[DataRequired()])
+    st_depression = SelectField('ST Depression Induced by Exercise Relative to Rest',  choices=[(1, 'Yes'), (0, 'No')], validators=[DataRequired()])
     slope = SelectField('Slope of the Peak Exercise ST Segment', choices=[(1, 'Downsloping'), (2, 'Flat'), (3, 'Upsloping')], validators=[DataRequired()])
 
     submit = SubmitField('Submit')
