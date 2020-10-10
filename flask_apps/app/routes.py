@@ -30,9 +30,7 @@ def inputDiabetesInfo():
         print('smoking history ', form.smoking_history.data)
         print('smoking status ', form.smoking_status.data)
         # send to GAN
-<<<<<<< HEAD
         # return redirect(url_for('diabetesoutput')) this should go to output page instead
-=======
     default_input = [[1970, 67, 180, 28.2, 120, 80, 1, 1, 0, 0, 0, 1, 0, 0]]
     gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
 
@@ -40,7 +38,6 @@ def inputDiabetesInfo():
     print('Chance of type 2 Diabetes: ', outcome[0])
 
         # return redirect(url_for('diabetesoutput'))
->>>>>>> development
     return render_template('input_diabetes.html', title='Diabetes Inputs', form=form)
 
 @app.route('/diabetesoutput')
