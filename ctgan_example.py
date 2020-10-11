@@ -27,9 +27,9 @@ discrete_columns = ['DMIndicator',
 'Smoke']
 
 ctgan = CTGANSynthesizer()
-ctgan.fit(dm_positive, discrete_columns, epochs=5)
+ctgan.fit(dm_positive, discrete_columns)
 #ctgan.save('./trained_models')
-samples = ctgan.sample(1000)
+samples = ctgan.sample(2000)
 print('First 10 generated samples: ', samples[:10])
 samples_dm = samples['DMIndicator'].to_numpy()
 dm_rounded = np.rint(samples_dm.astype(np.double))
@@ -39,3 +39,5 @@ print(samples['Gender'].value_counts())
 print('Max height', samples['HeightMedian'].max())
 print('Min height', samples['HeightMedian'].min())
 print('Year of birth average ', samples['YearOfBirth'].mean())
+
+samples.to_csv('./data/ctgan_generated_data.csv', index=False)

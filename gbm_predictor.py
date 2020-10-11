@@ -7,10 +7,12 @@ from sklearn.metrics import mean_squared_error, average_precision_score,precisio
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 from matplotlib import pyplot as plt
-from ctgan import CTGANSynthesizer
+#from ctgan import CTGANSynthesizer
 
 data = pd.read_csv('./data/all_data_important_columns.csv')
-synthesized_data = pd.read_csv('./data/ehr_generated_data_with_smoking.csv')
+print(data['State'].value_counts())
+synthesized_data = pd.read_csv('./data/ctgan_generated_data.csv')
+
 data.rename(columns={'Smoker.x': 'Smoke'},inplace = True)
 
 encoded_gender = pd.get_dummies(data.Gender, prefix='Gender')
@@ -21,6 +23,16 @@ encoded_smoking.reset_index(drop=True)
 data.reset_index(drop=True)
 data = pd.concat([data,encoded_smoking], axis=1)
 data = pd.concat([data,encoded_gender], axis=1)
+
+encoded_gender_synthesized = pd.get_dummies(synthesized_data.Gender, prefix='Gender')
+encoded_gender_synthesized.reset_index(drop=True)
+
+encoded_smoking_synthesized = pd.get_dummies(synthesized_data.Smoke, prefix='Smoke')
+encoded_smoking_synthesized.reset_index(drop=True)
+synthesized_data.reset_index(drop=True)
+synthesized_data = pd.concat([synthesized_data,encoded_smoking_synthesized], axis=1)
+synthesized_data = pd.concat([synthesized_data, encoded_gender_synthesized], axis = 1)
+print('gan data after encoding smoking: ', synthesized_data.shape)
 y = data[['DMIndicator']]
 
 data['L2_HypertensionEssential'] = data['L2_HypertensionEssential'].clip(0,1)
@@ -67,12 +79,12 @@ Synthesized_X = synthesized_data[[
 'L2_Hypercholesterolemia', 
 'L2_AtherosclerosisCoronary',
 'L2_HyperlipOther',
-'Smoking_2', 
-'Smoking_15', 
-'Smoking_20', 
-'Smoking_30', 
-'Smoking_40']]
-Synthesized_X = Synthesized_X.rename(columns={"Smoking_2": "Smoke_2", "Smoking_15": "Smoke_15", "Smoking_20": "Smoke_20", "Smoking_30": "Smoke_30", "Smoking_40": "Smoke_40",})
+'Smoke_2', 
+'Smoke_15', 
+'Smoke_20', 
+'Smoke_30', 
+'Smoke_40']]
+#Synthesized_X = Synthesized_X.rename(columns={"Smoking_2": "Smoke_2", "Smoking_15": "Smoke_15", "Smoking_20": "Smoke_20", "Smoking_30": "Smoke_30", "Smoking_40": "Smoke_40",})
 synthesized_y = synthesized_data['DMIndicator']
 
 X_diabetic = data.loc[data['DMIndicator']==1]
@@ -137,8 +149,13 @@ print('shape of training data combined with synthesized data ', complete_X_with_
 #train_y = pd.concat([train_y, synthesized_y])
 print('shape of training labels combined with synthesized labels ', complete_y_with_synthesized.shape)
 
+train_X_synthesized = pd.concat([train_X, Synthesized_X])
+train_y_synthesized = pd.concat([train_y, synthesized_y])
+print('Synthesized X shape ', train_X.shape)
+print('Synthesized Y shape ', train_y.shape)
+print('First 10 rows of synthesized x ', Synthesized_X[:10])
 
-lgb_train = lgb.Dataset(train_X, train_y)
+lgb_train = lgb.Dataset(train_X_synthesized, train_y_synthesized)
 lgb_eval = lgb.Dataset(test_X, test_y, reference=lgb_train)
 
 # specify your configurations as a dict
@@ -176,8 +193,8 @@ gbm_classifier_synthesized = LGBMClassifier(n_estimators=90,
                           metrics ='auc')
 
 #Create separate training set containing gan-synthesized datapoints
-train_X_synthesized = pd.concat([train_X, Synthesized_X])
-train_y_synthesized = pd.concat([train_y, synthesized_y])
+
+
 
 #train/test one classifier on original data and the other on syntheszied data, test both with original unsynthesized test set
 classifier_model = gbm_classifier.fit(train_X, train_y)
@@ -212,7 +229,7 @@ loaded_gbm = pickle.load(open(filename, 'rb'))
 print('Starting predicting...')
 # predict
 y_pred = loaded_gbm.predict(test_X, num_iteration=loaded_gbm.best_iteration)
-y_rounded = np.rint(y_pred)
+y_rounded = np.rint(classifier_probs_synthesized)
 print(y_rounded[:10])
 default_input = [[1990, 67, 180, 28.2, 120, 80, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0]]
 single_pred = loaded_gbm.predict(default_input, num_iteration=loaded_gbm.best_iteration)
