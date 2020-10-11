@@ -29,7 +29,7 @@ def inputDiabetesInfo():
         gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
         outcome = gbm_predictor.predict([user_input], num_iteration=gbm_predictor.best_iteration)
         print('Chance of type 2 Diabetes: ', outcome[0])
-        output_value = round(100 * outcome[0], 2)
+        output_value = round(100 * outcome[0], 3)
         return render_template('output_diabetes.html', prediction=output_value) #this should go to output page instead
     
         # return redirect(url_for('diabetesoutput'))
