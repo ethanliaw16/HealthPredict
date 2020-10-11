@@ -14,7 +14,7 @@ import random
 
 def discriminator():
     model = Sequential()
-    model.add(Dense(512, input_dim=15))
+    model.add(Dense(512, input_dim=21))
     model.add(LeakyReLU(alpha=.2))
     model.add(Dropout(.4))
     model.add(Dense(256, activation='relu'))
@@ -34,7 +34,7 @@ def generator(latent_dimension):
     model.add(Dense(256, activation='relu'))
     model.add(LeakyReLU(alpha=.2))
     model.add(Dropout(.4))
-    model.add(Dense(15, activation = 'relu'))
+    model.add(Dense(21, activation = 'relu'))
     opt = Adam(lr=.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
     return model
@@ -53,6 +53,7 @@ def generate_fake_samples(num_samples):
     bmi = rand(num_samples,1)
     birth_year = rand(num_samples,1)
     possible_outcomes = [0,1]
+    
     gender_M = []
     L2_HypertensionEssential = []
     L2_MixedHyperlipidemia = []
@@ -61,12 +62,15 @@ def generate_fake_samples(num_samples):
     L2_Hypercholesterolemia = []
     L2_AtherosclerosisCoronary = []
     L2_HyperlipOther = []
-    #Smoke_0 = []
-    #Smoke_2 = []
-    #Smoke_15 = []
-    #Smoke_20 = []
-    #Smoke_30 = []
-    #Smoke_40 = []
+    Smoke_minus_1 = []
+    Smoke_0 = []
+    Smoke_2 = []
+    Smoke_15 = []
+    Smoke_20 = []
+    Smoke_30 = []
+    Smoke_40 = []
+    possible_smoke_choices = [0,1,2,3]
+    possible_smoking_codes = [Smoke_2, Smoke_15, Smoke_30, Smoke_40]
     for i in range(num_samples):
         gender_M.append(random.choice(possible_outcomes))
         L2_HypertensionEssential.append(random.choice(possible_outcomes))
@@ -76,9 +80,18 @@ def generate_fake_samples(num_samples):
         L2_Hypercholesterolemia.append(random.choice(possible_outcomes))
         L2_AtherosclerosisCoronary.append(random.choice(possible_outcomes))
         L2_HyperlipOther.append(random.choice(possible_outcomes))
+        Smoke_0.append(random.choice(possible_outcomes));
+        Smoke_20.append(random.choice(possible_outcomes));
+        smoking_code = random.choice(possible_smoke_choices)
+        
+        for i in possible_smoke_choices:
+            if(i == smoking_code):
+                possible_smoking_codes[i].append(1)
+            else:
+                possible_smoking_codes[i].append(0)
     dm_indicator = np.ones((num_samples, 1))
     fake_labels = np.zeros((num_samples,1))
-    return np.column_stack((height,weight,s_blood_pressure,d_blood_pressure,bmi,birth_year, gender_M, L2_HypertensionEssential, L2_MixedHyperlipidemia, L2_ChronicRenalFailure, L2_Alcohol, L2_Hypercholesterolemia, L2_AtherosclerosisCoronary, L2_HyperlipOther, dm_indicator)),fake_labels
+    return np.column_stack((height,weight,s_blood_pressure,d_blood_pressure,bmi,birth_year, gender_M, L2_HypertensionEssential, L2_MixedHyperlipidemia, L2_ChronicRenalFailure, L2_Alcohol, L2_Hypercholesterolemia, L2_AtherosclerosisCoronary, L2_HyperlipOther, Smoke_0, possible_smoking_codes[0], possible_smoking_codes[1], Smoke_20, possible_smoking_codes[2], possible_smoking_codes[3], dm_indicator)),fake_labels
 
 def generate_fake_samples_with_model(generator_model, latent_dimension, num_samples):
     x_input = generate_latent_points(latent_dimension, num_samples)
@@ -146,15 +159,21 @@ batch_size=32):
             if(i + 1) % 100 == 0:
                 print('Summary----------------------------------------')
                 real_acc, fake_acc = performance_summary(i, generator_model, discriminator_model, scaled_dataset, latent_dimension)
-                if real_acc > 70 and fake_acc > 70 and fake_acc < 90:
-                    filename = './trained_models/ehr_generator_model_%03d_%03d.h5' % (real_acc, fake_acc)
+                if real_acc > 70 and fake_acc > 70 and fake_acc < 90 and real_acc < 90:
+                    filename = './trained_models/ehr_generator_model_with_smoking_%03d_%03d.h5' % (real_acc, fake_acc)
                     print('saving ', filename)
                     generator_model.save(filename)
                 
 
 # load the dataset
 dataset = pd.read_csv('./data/minority_ehr_encoded.csv', delimiter=',')
+print(dataset['Smoke_2'].value_counts())
+print(dataset['Smoke_15'].value_counts())
+print(dataset['Smoke_30'].value_counts())
+print(dataset['Smoke_40'].value_counts())
+dataset = dataset.loc[dataset['YearOfBirth'] > 1930]
 # split into input (X) and output (y) variables
+#Smoke_-1,Smoke_0,Smoke_2,Smoke_15,Smoke_20,Smoke_30,Smoke_40
 X = dataset[[ 
 'YearOfBirth', 
 'HeightMedian', 
@@ -169,12 +188,18 @@ X = dataset[[
 'L2_Alcohol', 
 'L2_Hypercholesterolemia', 
 'L2_AtherosclerosisCoronary',
-'L2_HyperlipOther']]
+'L2_HyperlipOther',
+'Smoke_0',
+'Smoke_2',
+'Smoke_15',
+'Smoke_20',
+'Smoke_30',
+'Smoke_40']]
 y = dataset['DMIndicator']
 #y = np.reshape(y,(np.size(y), 1))
 data_minmaxes = np.asarray(get_data_min_max(X))
 np.set_printoptions(suppress=True)
-np.savetxt('./data/ehr_minmaxes.csv', data_minmaxes, delimiter=',', fmt='%f')
+np.savetxt('./data/ehr_minmaxes_with_smoking.csv', data_minmaxes, delimiter=',', fmt='%f')
 
 scaled_dataset = np.column_stack((minmax_scale(X),y))
 print('First 5 scaled rows: ', scaled_dataset[:5])
