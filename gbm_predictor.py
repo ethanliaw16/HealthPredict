@@ -5,7 +5,7 @@ import numpy as np
 import pickle
 from sklearn.metrics import mean_squared_error, average_precision_score,precision_recall_curve, plot_precision_recall_curve, roc_curve
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, auc
 from matplotlib import pyplot as plt
 #from ctgan import CTGANSynthesizer
 
@@ -214,6 +214,10 @@ plt.show(block=True)
 
 fpr,tpr,threshold = roc_curve(test_y, classifier_probs)
 fpr_s, tpr_s, threshold = roc_curve(test_y, classifier_probs_synthesized)
+
+print('Area under curve for original: ', auc(fpr,tpr))
+print('Area under curve for synthesized: ', auc(fpr_s, tpr_s))
+
 plt.plot(fpr,tpr, label='Original Training Data Only')
 plt.plot(fpr_s, tpr_s, label='Original and Synthesized Data Combined')
 plt.legend()
