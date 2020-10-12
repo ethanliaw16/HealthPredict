@@ -1,0 +1,7 @@
+Smoking Status Codes: 
+Smoke_-1 -> does not currently smoke
+smoke_20 -> currently smokes
+Smoke_2 -> few(1-3) cigarettes per day
+Smoke_15 -> up to 1 pack per day
+Smoke_30 -> between 1 and 2 packs per day
+Smoke_40 -> more than 2 packs per day
