@@ -1,22 +1,17 @@
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            HealthPredict
-        </title>
-    </head>
-    <body>
-        <p>This is our senior project. Click "Get Data" to see some of the data we will be using.</p>
-        <button id="get-data-button">Get Data</button>
-        <p id="received_data"></p>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-        <script>
-            $("#get-data-button").click(function(event){
-                $.get("http://192.168.1.88:5000/home", function(response){
-                    $("#received_data").text(response.diabetes_data);
-                    console.log(response);
-                });
-            });
-        </script>
-    </body>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>HealthPredict</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='homepage.css') }}">
+  </head>
+  <body>
+    <h1>Make a Prediction</h1>
+    <img class="logo" src="{{ url_for('static', filename='assets/images/HealthPredict_Logo.svg') }}" alt="HealthPredict-logo">
+    <a href='/diabetesinputs'><button class="diabetes-button">Diabetes</button></a>
+    <button class="heart-diease-button">Heart Disease</button>
+    <!-- <a href='/heartdiseaseinputs'><button class="heart-diease-button">Heart Disease</button></a> -->
+    <a class="about" href="/about">About HealthPredict</a>
+  </body>
 </html>

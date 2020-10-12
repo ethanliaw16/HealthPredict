@@ -3,11 +3,17 @@ from keras.models import Sequential
 from keras.layers import Dense, LeakyReLU, Dropout
 from keras.optimizers import Adam
 from numpy.random import randint, uniform, randn, rand
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import minmax_scale
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold
+
 import min_max
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 import random
 
 def predictor():
@@ -19,13 +25,13 @@ def predictor():
     model.add(LeakyReLU(alpha=.2))
     model.add(Dropout(.4))
     model.add(Dense(1, activation='sigmoid'))
-    
     opt = Adam(lr=0.0002, beta_1=0.5)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
     return model
 
-def train_predictor(predictor, train_x, train_y, test_x, test_y, epochs=100, batch_size=128):
-    predictor.fit(train_x, train_y, epochs=epochs, batch_size=batch_size,validation_data=(test_x, test_y))
+def train_predictor(predictor, train_x, train_y, test_x, test_y, epochs=100, batch_size=2048):
+    class_weight = {0: 1.,1: 100.}
+    predictor.fit(train_x, train_y, epochs=epochs, batch_size=batch_size,validation_data=(test_x, test_y), class_weight=class_weight)
 
 data = pd.read_csv('./data/all_data_important_columns.csv')
 data.rename(columns={'Smoker.x': 'Smoke'},inplace = True)
@@ -48,6 +54,8 @@ data['L2_AtherosclerosisCoronary'] = data['L2_AtherosclerosisCoronary'].clip(0,1
 data['L2_HyperlipOther'] = data['L2_HyperlipOther'].clip(0,1)
 actual_diabetics = data.loc[data['DMIndicator']==1]
 actual_nondiabetics = data.loc[data['DMIndicator']==0]
+
+actual_diabetics.to_csv('./data/minority_ehr_encoded.csv', index=False)
 
 X_dataframe = data[[
 'Gender_M', 
@@ -117,24 +125,29 @@ X_nondiabetic = actual_nondiabetics[[
 
 
 y = data[['DMIndicator']]
-
+print(y.value_counts())
 y_diabetic = actual_diabetics['DMIndicator']
 y_nondiabetic = actual_nondiabetics['DMIndicator']
+X_nondiabetic_small = X_nondiabetic[:1800]
+y_nondiabetic_small = y_nondiabetic[:1800]
 
-print(X_dataframe.shape)
-X_scaled = minmax_scale(X_dataframe)
+X_balanced = pd.concat([X_nondiabetic_small, X_diabetic])
+y_balanced = pd.concat([y_nondiabetic_small, y_diabetic])
+print('undersampled nondiabetic shape', X_balanced.shape)
+X_scaled = minmax_scale(X_balanced)
 print(X_scaled[:5])
-print(y.head())
-train_X = X_scaled[:7000]
-train_y = y[:7000]
-
-test_X = X_scaled[7000:]
-test_y = y[7000:]
+train_X,test_X,train_y,test_y = train_test_split(X_scaled, y_balanced, random_state=42)
+#train_X = X_scaled[:7000]
+#train_y = y[:7000]
+#
+#test_X = X_scaled[7000:]
+#test_y = y[7000:]
 
 print(train_X.shape)
 print(test_X.shape)
 
 model = predictor()
+#model = make_model(output_bias=.19)
 print(model.summary())
 
 train_predictor(model, train_X,train_y, test_X,test_y)
@@ -151,12 +164,12 @@ print('Confusion Matrix\n',confusion_matrix(test_y,y_pred))
 
 print('diabetic shape ', X_diabetic.shape)
 print('nondiabetic shape ', X_nondiabetic.shape)
-all_diabetic_pred = model.predict(X_diabetic)
+all_diabetic_pred = model.predict(minmax_scale(X_diabetic))
 diabetic_pred = np.argmax(all_diabetic_pred, axis=1)
 
 print('Confusion Matrix for All Diabetics\n', confusion_matrix(y_diabetic,diabetic_pred))
 
-all_nondiabetic_pred = model.predict(X_nondiabetic)
+all_nondiabetic_pred = model.predict(minmax_scale(X_nondiabetic))
 nondiabetic_pred = np.argmax(all_nondiabetic_pred, axis=1)
 
 print('Confusion Matrix for All Nondiabetics\n', confusion_matrix(y_nondiabetic, nondiabetic_pred))

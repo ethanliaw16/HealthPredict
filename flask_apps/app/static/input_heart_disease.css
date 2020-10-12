@@ -25,7 +25,7 @@ form {
   font-weight: 200;
 }
 
-.diabetes {
+.heart-disease {
   margin-top: 5%;
   display: inline-block;
   margin-bottom: 0;
@@ -33,7 +33,7 @@ form {
   font-weight: 400;
 }
 
-.height, .weight, .age, .gender, .sys_bp, .dias_bp{
+.age, .gender, .chest_pain, .bp, .chol, .blood_sugar, .ekg, .heart_rate, .exercise_angina, .st_depression, .slope{
     color: rgb(113,111,109);
     font-size: 14px;
     width: 200px;
@@ -41,58 +41,20 @@ form {
     margin-bottom: 5px;
   }
 
-  .age-div, .gender-div, .height-div, .weight-div, .sys_bp-div, .dias_bp-div {
+  .age-div, .gender-div, .chest_pain-div, .bp-div, .chol-div, .blood_sugar-div, .ekg-div, .heart_rate-div, .exercise_angina-div, .st_depression-div, .slope-div {
     display: inline-block;
-    margin-right: 2%;
+    margin-right: 5%;
     margin-top: 1%;
   }
 
-  .smoking-div, .diagnoses-div {
-    display: inline-block;
-  }
-
-  .smoking-div {
-    width: 45%;
-  }
-
-  .smoking_status-div, .smoking_history-div {
-    /* display: block; */
-    margin-left: 0px;
-  }
-
-  .smoking_history-div {
-    margin-top: 4%;
-  }
-
-  .personal-div {
-    width: 100%;
-  }
-
-  .diagnoses-div {
-    width: 50%;
-    margin-left: 1%;
-    margin-top: 0;
-    margin-bottom: 2%;
+  .first-block, .second-block, .third-block {
+      width: 100%;
+      display: block;
   }
 
 label {
   font-weight: 300;
   font-size: 18px;
-}
-
-.diagnoses {
-  font-weight: 300;
-  font-size: 18px;
-}
-
-.hypertension, .high_chol, .renal_failure, .alc_dependence, .hyperchol, .coronary_artery {
-  display: inline;
-  margin-left: 1%;
-}
-
-.hypertension-div, .high_chol-div, .renal_failure-div, .alc_dependence-div, .hyperchol-div, .coronary_artery-div {
-  margin-top: 1%;
-  width: 700px;
 }
 
 .error {
@@ -130,17 +92,12 @@ input[type="text"] {
     display: inline-block; */
 }
 
-.input-boxes-large {
-  width: 500px;
-  height: 120px;
-
-}
-
 li {
   padding-top: 1%;
 }
 
 .required {
+    margin-top: 2%;
     font-size: 20px;
     
     display: block;
@@ -170,12 +127,13 @@ li {
 
 .submit_data_div {
   height: 50px;
-  
+  width: 100%;
+ 
 }
 
 .submit_data {
     float: right;
-    margin-right: 9%;
+    margin-right: 31%;
     width: 181px;
     height: 39px;
     font-size: 24px;
@@ -184,17 +142,5 @@ li {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
     border-color: transparent;
-
-    /* background: #5DBFE2 100%;
-    text-align: center;
-    font-size: 14px;
-    color: white; */
-    /* width: 100%;
-    height: 100%; */
-    /* border-radius: 6px;
-    width: 175.2px;
-    height: 33px;
-    margin-left: 17%;
-    margin-top: 1%; */
 }
 
