@@ -31,7 +31,7 @@ def inputDiabetesInfo():
         print('Chance of type 2 Diabetes: ', outcome[0])
         output_value = round(100 * outcome[0], 3)
         return render_template('output_diabetes.html', prediction=output_value) #this should go to output page instead
-    
+
         # return redirect(url_for('diabetesoutput'))
     return render_template('input_diabetes.html', title='Diabetes Inputs', form=form)
 
@@ -49,3 +49,7 @@ def inputHeartDiseaseInfo():
     # if form.validate_on_submit():
          # return redirect(url_for('home')) this should go to output page instead
     return render_template('input_heart_disease.html', title='Heart Disease Inputs', form=form)
+
+@app.route('/heartdiseaseoutput')
+def output_heart_disease():
+    return render_template('output_heart_disease.html')

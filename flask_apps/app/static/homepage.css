@@ -46,7 +46,7 @@ button {
 
 }
 
-.heart-diease-button {
+.heart-disease-button {
   position: absolute;
   left: calc(50% - 183px/2 + 121px);
   top: 200px;
