@@ -9,6 +9,7 @@ from sklearn.metrics import classification_report, confusion_matrix, auc
 from matplotlib import pyplot as plt
 #from ctgan import CTGANSynthesizer
 
+
 data = pd.read_csv('./data/all_data_important_columns.csv')
 print(data['State'].value_counts())
 synthesized_data = pd.read_csv('./data/ctgan_generated_data.csv')
@@ -140,10 +141,14 @@ y_nondiabetic_small = y_nondiabetic
 complete_X = pd.concat([x_nondiabetic_small, x_diabetic_input])
 complete_y = pd.concat([y_nondiabetic_small, y_diabetic])
 
+weight = 20 * complete_y + 1
+complete_X['Class_Weight'] = weight
+
 complete_X_with_synthesized = pd.concat([x_nondiabetic_small, x_diabetic_input, Synthesized_X])
 complete_y_with_synthesized = pd.concat([y_nondiabetic_small, y_diabetic, synthesized_y])
 
 train_X,test_X,train_y,test_y = train_test_split(complete_X, complete_y, random_state=1029328)
+test_X['Class_Weight'].values[:]=10.5
 print('shape of training data combined with synthesized data ', complete_X_with_synthesized.shape)
 #train_X = pd.concat([train_X, Synthesized_X])
 #train_y = pd.concat([train_y, synthesized_y])
@@ -163,23 +168,25 @@ params = {
     'boosting_type': 'gbdt',
     'objective': 'binary',
     'metric': {'auc'},
-    'num_leaves': 30,
+    'num_leaves': 70,
+    'is_unbalance':True,
     #'num_iterations': 5000,
-    'learning_rate': 0.000001,
+    'learning_rate': 0.001,
     'feature_fraction': 0.4,
-    'bagging_fraction': 0.6,
+    'bagging_fraction': 0.5,
     'bagging_freq': 1,
-    'verbose': 0
+    'verbose': 0,
+    'weight_column':'Class_Weight'
 }
 
 print('Starting training...')
 # train
-gbm = lgb.cv(params,
-            lgb_train,
-            num_boost_round=1000,
-            metrics='auc',
-            early_stopping_rounds=300,
-            verbose_eval=True)
+#gbm = lgb.cv(params,
+#            lgb_train,
+#            num_boost_round=1000,
+#            metrics='auc',
+#            early_stopping_rounds=300,
+#            verbose_eval=True)
 #print('Cross validation results', gbm)
 gbm_trained = lgb.train(params,
                         lgb_train,
@@ -241,12 +248,38 @@ loaded_gbm = pickle.load(open(filename, 'rb'))
 print('Starting predicting...')
 # predict
 y_pred = loaded_gbm.predict(test_X, num_iteration=loaded_gbm.best_iteration)
-y_rounded = (y_pred > .3) * 1
+fpr,tpr,thresholds = roc_curve(test_y, y_pred)
+
+differences = abs(tpr - (1 - fpr))
+threshold = thresholds[np.argmin(differences)]
+print('threshold to use: ', threshold)
+pred_max = np.max(y_pred)
+pred_min = np.min(y_pred)
+min_max_and_threshold = np.array([pred_min,threshold,pred_max])
+np.savetxt('./data/gbm_scalers.csv', min_max_and_threshold, delimiter=',')
+
 print(np.max(y_pred))
 print(np.min(y_pred))
-default_input = [[1990, 67, 180, 28.2, 120, 80, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0]]
-single_pred = loaded_gbm.predict(default_input, num_iteration=loaded_gbm.best_iteration, raw_score=True)
-print('Chance of type 2 Diabetes: %03f' % (y_pred[0]))
+single_pred = y_pred[0]
+if(single_pred >= threshold):
+    scaled_pred = ((single_pred - threshold) / (2 * (pred_max - threshold))) + .5
+else:
+    scaled_pred = ((single_pred - pred_min) / (2 * (threshold - pred_min)))
+
+print('First prediction scaled to 0 and 1: ', scaled_pred)
+y_rounded = (y_pred > threshold) * 1
+
+
+#default_input = [[1990, 67, 180, 28.2, 120, 80, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0,2.5]]
+#single_pred = loaded_gbm.predict(default_input, num_iteration=loaded_gbm.best_iteration, raw_score=True)
+#print('Chance of type 2 Diabetes: %03f' % (y_pred[0]))
+
+plt.plot(thresholds,1-fpr,label='threshold vs fpr')
+plt.plot(thresholds,tpr,label='threshold vs tpr')
+plt.legend()
+plt.show(block=True)
+plt.plot(fpr,tpr,label='tpr vs fpr')
+plt.show(block=True)
 #Y_pred = np.argmax(y_pred, axis=0)
 # eval
 #print('The rmse of prediction is:', mean_squared_error(test_y, y_pred) ** 0.5)

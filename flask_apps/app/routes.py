@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request, render_template
 from app import app
 import pandas as pd
+import numpy as np
 import lightgbm as lgb
 import pickle
 from app.forms import DiabetesInputsForm, HeartDiseaseInputsForm
 from app.diabetes_form_map import map_form_to_vector
+from app.scale_prediction_output import scale_output
 # @app.route('/home', methods=['GET'])
 # def get_data():
 #     some_data = pd.read_csv('../ehr_diabetes_no_missing_3k.csv')
@@ -29,7 +31,9 @@ def inputDiabetesInfo():
         gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
         outcome = gbm_predictor.predict([user_input], num_iteration=gbm_predictor.best_iteration)
         print('Chance of type 2 Diabetes: ', outcome[0])
-        output_value = round(100 * outcome[0], 3)
+        gbm_scalers = np.loadtxt('../data/gbm_scalers.csv')
+        scaled_outcome = scale_output(outcome,gbm_scalers)
+        output_value = round(100 * scaled_outcome[0], 3)
         return render_template('output_diabetes.html', prediction=output_value) #this should go to output page instead
     
         # return redirect(url_for('diabetesoutput'))
