@@ -1,9 +1,10 @@
 from app.forms import DiabetesInputsForm
+from app.impute_missing_for_input import impute_missing
 import numpy as np
 
 def map_form_to_vector(form):
-    prediction_vector = np.zeros(19)
-    prediction_vector[0] = form.age.data
+    prediction_vector = np.zeros(20)
+    prediction_vector[0] = 2020 - form.age.data
     prediction_vector[1] = form.gender.data
     prediction_vector[2] = form.height.data
     prediction_vector[3] = form.weight.data
@@ -31,12 +32,13 @@ def map_form_to_vector(form):
 
     if(currentSmokeStatusIndex > 0):
         prediction_vector[currentSmokeStatusIndex] = 1
-
+    prediction_vector[19] = 10.5
     #prediction_vector.append(form.sys_bp.data)
     #prediction_vector.append(form.dias_bp.data)
-    print('gender ', form.gender.data)
-    print('height ', form.height.data)
-    print('smoking history ', form.smoking_history.data)
-    print('smoking status ', form.smoking_status.data)
-    print('Current Vector: ', prediction_vector)
-    return prediction_vector
+    #print('gender ', form.gender.data)
+    #print('height ', form.height.data)
+    #print('smoking history ', form.smoking_history.data)
+    #print('smoking status ', form.smoking_status.data)
+    #print('Current Vector: ', prediction_vector)
+    prediction_vector_no_missing = impute_missing(prediction_vector)
+    return prediction_vector_no_missing
