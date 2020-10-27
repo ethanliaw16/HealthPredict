@@ -69,8 +69,8 @@ form {
   }
 
   .diagnoses-div {
-    width: 53%;
-    height: 800px;
+    width: 50%;
+    /* height: 800px; */
     margin-left: 1%;
     margin-top: 0;
     margin-bottom: 2%;
@@ -84,6 +84,7 @@ label {
 .diagnoses {
   font-weight: 300;
   font-size: 18px;
+  width: 700px;
 }
 
 .hypertension, .high_chol, .renal_failure, .alc_dependence, .hyperchol, .coronary_artery {
