@@ -4,7 +4,12 @@ import numpy as np
 
 def map_form_to_vector(form):
     prediction_vector = np.zeros(20)
-    prediction_vector[0] = 2020 - form.age.data
+    print(form.age.data)
+    if(str(form.age.data) == 'None'):
+        prediction_vector[0] = -1
+    else:
+        print("Is not equal to None, ", form.age.data)
+        prediction_vector[0] = 2020 - form.age.data
     prediction_vector[1] = form.gender.data
     prediction_vector[2] = form.height.data
     prediction_vector[3] = form.weight.data
