@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DecimalField, RadioField, IntegerField, SelectField, widgets, SelectMultipleField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import Input
 
 # class MultiCheckboxField(SelectMultipleField):
@@ -8,8 +8,8 @@ from wtforms.widgets import Input
 #     option_widget = widgets.CheckboxInput()
 
 class DiabetesInputsForm (FlaskForm):
-    age = IntegerField('Age')
-    gender = SelectField('Gender', choices=[(0, 'Female'), (1, 'Male')], validators=[DataRequired()])
+    age = IntegerField('Age', validators=[Optional()])
+    gender = SelectField('Gender', choices=[('0', 'Female'), ('1', 'Male')], validators=[DataRequired()])
     height = DecimalField('Height', places=2, validators=[DataRequired()])
     weight = DecimalField('Weight', places=2, validators=[DataRequired()])
     sys_bp = IntegerField('Systolic Blood Pressure', validators=[DataRequired()])
