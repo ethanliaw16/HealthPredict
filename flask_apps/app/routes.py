@@ -34,10 +34,9 @@ def inputDiabetesInfo():
         gbm_scalers = np.loadtxt('../data/gbm_scalers.csv')
         scaled_outcome = scale_output(outcome,gbm_scalers)
         output_value = round(100 * scaled_outcome[0], 3)
-        return render_template('output_diabetes.html', prediction=output_value) #this should go to output page instead
+        return render_template('output_diabetes.html', prediction=output_value) # go to output page
 
-        # return redirect(url_for('diabetesoutput'))
-    return render_template('input_diabetes.html', title='Diabetes Inputs', form=form)
+    return render_template('input_diabetes.html', title='Diabetes Inputs', form=form) # go back to form
 
 @app.route('/diabetesoutput')
 def output_diabetes():
@@ -49,11 +48,24 @@ def output_diabetes():
 
 @app.route('/heartdiseaseinputs', methods=['GET', 'POST'])
 def inputHeartDiseaseInfo():
-    form = HeartDiseaseInputsForm()
+    # form = HeartDiseaseInputsForm()
     # if form.validate_on_submit():
-         # return redirect(url_for('home')) this should go to output page instead
-    return render_template('input_heart_disease.html', title='Heart Disease Inputs', form=form)
+    #     # send to GAN
+    #     user_input = map_form_to_vector(form)
+    #     gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
+    #     outcome = gbm_predictor.predict([user_input], num_iteration=gbm_predictor.best_iteration)
+    #     print('Chance of Heart Disease: ', outcome[0])
+    #     gbm_scalers = np.loadtxt('../data/gbm_scalers.csv')
+    #     scaled_outcome = scale_output(outcome,gbm_scalers)
+    #     output_value = round(100 * scaled_outcome[0], 3)
+    #     return render_template('output_heart_disease.html', prediction=output_value) # go to output page
+
+    return render_template('input_heart_disease.html', title='Heart Disease Inputs', form=form) # go back to form
 
 @app.route('/heartdiseaseoutput')
 def output_heart_disease():
+    # default_input = [[]]
+    # gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
+    # outcome = gbm_predictor.predict(default_input, num_iteration=gbm_predictor.best_iteration)
+    # print('Chance of Heart Disease: ', outcome[0])
     return render_template('output_heart_disease.html')
