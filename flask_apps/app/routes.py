@@ -6,7 +6,9 @@ import lightgbm as lgb
 import pickle
 from app.forms import DiabetesInputsForm, HeartDiseaseInputsForm
 from app.diabetes_form_map import map_form_to_vector
+from app.heart_disease_form_map import map_form_to_vec
 from app.scale_prediction_output import scale_output
+import app.HeartDisease.HeartDiseaseInputs as hdi
 # @app.route('/home', methods=['GET'])
 # def get_data():
 #     some_data = pd.read_csv('../ehr_diabetes_no_missing_3k.csv')
@@ -48,24 +50,17 @@ def output_diabetes():
 
 @app.route('/heartdiseaseinputs', methods=['GET', 'POST'])
 def inputHeartDiseaseInfo():
-    # form = HeartDiseaseInputsForm()
-    # if form.validate_on_submit():
-    #     # send to GAN
-    #     user_input = map_form_to_vector(form)
-    #     gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
-    #     outcome = gbm_predictor.predict([user_input], num_iteration=gbm_predictor.best_iteration)
-    #     print('Chance of Heart Disease: ', outcome[0])
-    #     gbm_scalers = np.loadtxt('../data/gbm_scalers.csv')
-    #     scaled_outcome = scale_output(outcome,gbm_scalers)
-    #     output_value = round(100 * scaled_outcome[0], 3)
-    #     return render_template('output_heart_disease.html', prediction=output_value) # go to output page
-
+    form = HeartDiseaseInputsForm()
+    if form.validate_on_submit():
+        user_input = map_form_to_vec(form)
+        outcome = hdi.testModelWithInputs(user_input)
+        output_value = outcome[0]
     return render_template('input_heart_disease.html', title='Heart Disease Inputs', form=form) # go back to form
 
 @app.route('/heartdiseaseoutput')
 def output_heart_disease():
-    # default_input = [[]]
-    # gbm_predictor = pickle.load(open('../trained_models/gbm_predictor.txt', 'rb'))
-    # outcome = gbm_predictor.predict(default_input, num_iteration=gbm_predictor.best_iteration)
-    # print('Chance of Heart Disease: ', outcome[0])
+    form = HeartDiseaseInputsForm()
+    user_input = map_form_to_vec(form)
+    outcome = hdi.testModelWithInputs(user_input)
+    print('Chance of Heart Disease: ', outcome[0])
     return render_template('output_heart_disease.html')
