@@ -8,7 +8,7 @@ import os
 from app.forms import DiabetesInputsForm, HeartDiseaseInputsForm
 from app.diabetes_form_map import map_form_to_vector
 from app.heart_disease_form_map import map_form_to_vec
-from app.scale_prediction_output import scale_output
+from app.scale_prediction_output import scale_output, scale_input
 #import app.HeartDisease.HeartDiseaseInputs as hdi
 # @app.route('/home', methods=['GET'])
 # def get_data():
@@ -54,22 +54,22 @@ def inputHeartDiseaseInfo():
     form = HeartDiseaseInputsForm()
     if form.validate_on_submit():
         user_input = map_form_to_vec(form)
-        print('Current working directory: ', os.getcwd())
         pkl_filename = './app/HeartDisease/heart_disease_model.pkl'
         heartDiseaseLoadedModel = pickle.load(open(pkl_filename, 'rb'))
+        
         input_as_arr = np.asarray(user_input)
+        
         loaded_means = np.loadtxt('./app/HeartDisease/heart_disease_means.csv')
         loaded_stds = np.loadtxt('./app/HeartDisease/heart_disease_stds.csv')
-        input_as_arr = (input_as_arr - loaded_means) / loaded_stds
-        input_as_arr = input_as_arr.reshape(1,-1)
-        print('Vector mapped and scaled from user input: ', input_as_arr)
-        predictionProbability = heartDiseaseLoadedModel.predict_proba(input_as_arr)
-        prediction = heartDiseaseLoadedModel.predict(input_as_arr)
-        outcome = predictionProbability[0][0]
+        
+        scaled_input = scale_input(input_as_arr, loaded_stds, loaded_means)
+        
+        print('Vector mapped and scaled from user input: ', scaled_input)
+        predictionProbability = heartDiseaseLoadedModel.predict_proba(scaled_input)
+        prediction = heartDiseaseLoadedModel.predict(scaled_input)
+        outcome = round(100 * predictionProbability[0][0], 3)
         print('Our prediction: ', outcome)
-        return render_template('output_diabetes.html', prediction=round(100 * outcome, 3))
-        #outcome = hdi.testModelWithInputs(user_input)
-        #output_value = outcome[0]
+        return render_template('output_heart_disease.html', prediction=outcome)
     return render_template('input_heart_disease.html', title='Heart Disease Inputs', form=form) # go back to form
 
 @app.route('/heartdiseaseoutput')
