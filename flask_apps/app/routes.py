@@ -48,7 +48,7 @@ def output_diabetes():
 
 @app.route('/heartdiseaseinputs', methods=['GET', 'POST'])
 def inputHeartDiseaseInfo():
-    # form = HeartDiseaseInputsForm()
+    form = HeartDiseaseInputsForm()
     # if form.validate_on_submit():
     #     # send to GAN
     #     user_input = map_form_to_vector(form)
