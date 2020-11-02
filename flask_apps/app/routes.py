@@ -4,11 +4,12 @@ import pandas as pd
 import numpy as np
 import lightgbm as lgb
 import pickle
+import os
 from app.forms import DiabetesInputsForm, HeartDiseaseInputsForm
 from app.diabetes_form_map import map_form_to_vector
 from app.heart_disease_form_map import map_form_to_vec
 from app.scale_prediction_output import scale_output
-import app.HeartDisease.HeartDiseaseInputs as hdi
+#import app.HeartDisease.HeartDiseaseInputs as hdi
 # @app.route('/home', methods=['GET'])
 # def get_data():
 #     some_data = pd.read_csv('../ehr_diabetes_no_missing_3k.csv')
@@ -53,14 +54,28 @@ def inputHeartDiseaseInfo():
     form = HeartDiseaseInputsForm()
     if form.validate_on_submit():
         user_input = map_form_to_vec(form)
-        outcome = hdi.testModelWithInputs(user_input)
-        output_value = outcome[0]
+        print('Current working directory: ', os.getcwd())
+        pkl_filename = './app/HeartDisease/heart_disease_model.pkl'
+        heartDiseaseLoadedModel = pickle.load(open(pkl_filename, 'rb'))
+        input_as_arr = np.asarray(user_input)
+        loaded_means = np.loadtxt('./app/HeartDisease/heart_disease_means.csv')
+        loaded_stds = np.loadtxt('./app/HeartDisease/heart_disease_stds.csv')
+        input_as_arr = (input_as_arr - loaded_means) / loaded_stds
+        input_as_arr = input_as_arr.reshape(1,-1)
+        print('Vector mapped and scaled from user input: ', input_as_arr)
+        predictionProbability = heartDiseaseLoadedModel.predict_proba(input_as_arr)
+        prediction = heartDiseaseLoadedModel.predict(input_as_arr)
+        outcome = predictionProbability[0][0]
+        print('Our prediction: ', outcome)
+        return render_template('output_diabetes.html', prediction=round(100 * outcome, 3))
+        #outcome = hdi.testModelWithInputs(user_input)
+        #output_value = outcome[0]
     return render_template('input_heart_disease.html', title='Heart Disease Inputs', form=form) # go back to form
 
 @app.route('/heartdiseaseoutput')
 def output_heart_disease():
     form = HeartDiseaseInputsForm()
     user_input = map_form_to_vec(form)
-    outcome = hdi.testModelWithInputs(user_input)
+    outcome = {0}#= hdi.testModelWithInputs(user_input)
     print('Chance of Heart Disease: ', outcome[0])
     return render_template('output_heart_disease.html')
