@@ -29,15 +29,15 @@ class DiabetesInputsForm (FlaskForm):
 
 class HeartDiseaseInputsForm (FlaskForm):
     age = IntegerField('Age', validators=[DataRequired()])
-    gender = SelectField('Gender', choices=[(0, 'Female'), (1, 'Male')], validators=[DataRequired()])
-    chest_pain = SelectField('Chest Pain', choices=[(0, 'Asymptomatic'), (1, 'Atypical Angina'), (2, 'Non-anginal Pain'), (3, 'Typical Angina')], validators=[DataRequired()])
+    gender = SelectField('Gender', choices=[('0', 'Female'), ('1', 'Male')], validators=[DataRequired()])
+    chest_pain = SelectField('Chest Pain', choices=[('0', 'Asymptomatic'), ('1', 'Atypical Angina'), ('2', 'Non-anginal Pain'), ('3', 'Typical Angina')], validators=[DataRequired()])
     bp = IntegerField('Blood Pressure', validators=[DataRequired()])
     chol = IntegerField('Serum Cholestrol', validators=[DataRequired()])
-    blood_sugar = SelectField('Fasting Blood Sugar', choices=[(0, 'False'), (1, 'True')], validators=[DataRequired()])
-    ekg = SelectField('Resting Electrocardiographic Results', choices=[(0, 'Left Ventricular Hypertrophy'), (1, 'Normal'), (2, 'Having ST-T wave abnormality')], validators=[DataRequired()])
+    blood_sugar = SelectField('Fasting Blood Sugar', choices=[('0', 'False'), ('1', 'True')], validators=[DataRequired()])
+    ekg = SelectField('Resting Electrocardiographic Results', choices=[('0', 'Left Ventricular Hypertrophy'), ('1', 'Normal'), ('2', 'Having ST-T wave abnormality')], validators=[DataRequired()])
     heart_rate = IntegerField('Maximum Heart Rate Achieved During Exercise', validators=[DataRequired()])
-    exercise_angina = SelectField('Exercised-induced Angina', choices=[(1, 'Yes'), (0, 'No')], validators=[DataRequired()])
-    st_depression = SelectField('ST Depression Induced by Exercise Relative to Rest',  choices=[(1, 'Yes'), (0, 'No')], validators=[DataRequired()])
-    slope = SelectField('Slope of the Peak Exercise ST Segment', choices=[(0, 'Downsloping'), (1, 'Flat'), (2, 'Upsloping')], validators=[DataRequired()])
+    exercise_angina = SelectField('Exercised-induced Angina', choices=[('1', 'Yes'), ('0', 'No')], validators=[DataRequired()])
+    st_depression = SelectField('ST Depression Induced by Exercise Relative to Rest',  choices=[('1', 'Yes'), ('0', 'No')], validators=[DataRequired()])
+    slope = SelectField('Slope of the Peak Exercise ST Segment', choices=[('0', 'Downsloping'), ('1', 'Flat'), ('2', 'Upsloping')], validators=[DataRequired()])
 
     submit = SubmitField('Submit')
