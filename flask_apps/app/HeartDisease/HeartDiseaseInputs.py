@@ -32,10 +32,10 @@ def testModelWithInputs(input):
     # Line to print if the person has heart disease or not print('prediction:', prediction)
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     #sampleFeature = [ 46, 1, 1, 101, 197, 1, 1, 156, 0, 0, 2, 0, 3]
-    sampleFeature = [ 20, 0, 1, 120, 169, 0, 1, 180, 1, 1, 1, 0, 3]
+#    sampleFeature = [ 20, 0, 1, 120, 169, 0, 1, 180, 1, 1, 1, 0, 3]
 
-    value = testModelWithInputs(sampleFeature)
-    print(value[0])
-    print(value[1])
+#    value = testModelWithInputs(sampleFeature)
+#    print(value[0])
+#    print(value[1])

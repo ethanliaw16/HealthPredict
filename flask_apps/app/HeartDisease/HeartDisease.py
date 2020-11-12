@@ -13,6 +13,7 @@ def createAndLoadModel():
 
     #Randomly shifts the data rows in order to randomize the data set
     newHeartDF = heartDF.sample(frac=1)
+    print(newHeartDF)
 
     #Creates testing, training, and checking subsets from the original data set
     dfTrain = newHeartDF[:243]

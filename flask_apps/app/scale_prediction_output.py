@@ -17,3 +17,8 @@ def scale_output(outcome, gbm_scalers):
         scaled_outcome = ((outcome - pred_min) / (2 * (pred_threshold - pred_min)))
     
     return scaled_outcome
+
+def scale_input(input_as_arr, stds, means):
+    input_as_arr = (input_as_arr - means) / stds
+    input_as_arr = input_as_arr.reshape(1,-1)
+    return input_as_arr
