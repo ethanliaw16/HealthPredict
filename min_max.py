@@ -13,3 +13,5 @@ def get_data_min_max(dataset):
         #print('Column ', i, ' min: ', column_min, ' max: ', column_max)
         data_minmaxes.append([column_min,column_max])
     return data_minmaxes
+
+print('sissi is learning versijon control!')
