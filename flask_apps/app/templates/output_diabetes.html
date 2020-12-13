@@ -6,7 +6,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='output_diabetes.css') }}">
   </head>
   <body>
-    <h1 class = "title">HealthPredict Results for <strong>Diabetes</strong></h1>
-
+    <h1 class = "title">HealthPredict Results for</h1> <h1 class = "diabetes">Diabetes</h1>
+    <h2 class = "prediction">Prediction: The patient will have a {{prediction}}% chance of developing diabetes.</h2>
+    <a href='/home'><button class="another">Make Another Prediction</button></a>
   </body>
 </html>

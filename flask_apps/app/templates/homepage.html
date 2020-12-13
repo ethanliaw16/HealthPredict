@@ -9,9 +9,9 @@
   <body>
     <h1>Make a Prediction</h1>
     <img class="logo" src="{{ url_for('static', filename='assets/images/HealthPredict_Logo.svg') }}" alt="HealthPredict-logo">
-    <button class="diabetes-button">Diabetes</button>
-    <button class="heart-diease-button">Heart Disease</button>
-    <button class="both-button">Both</button>
+    <a href='/diabetesinputs'><button class="diabetes-button">Diabetes</button></a>
+    <a href='/heartdiseaseinputs'><button class="heart-disease-button">Heart Disease</button></a>
+    <!-- <a href='/heartdiseaseinputs'><button class="heart-diease-button">Heart Disease</button></a> -->
     <a class="about" href="/about">About HealthPredict</a>
   </body>
 </html>

@@ -1,0 +1,191 @@
+<html>
+    <title>Heart Disease Inputs</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='input_heart_disease.css') }}">
+
+  <h1 class="patient-info">Patient Information for Predicting</h1><h1 class="heart-disease">Heart Disease</h1>
+  <div class="input">
+    <form class="form" #f="ngForm" action='' method='POST'>
+      {{ form.hidden_tag() }}
+
+      <div class="first-block">
+
+      <div class="age-div">
+      <div class="age">
+          <label for="age">Age (Years)*</label>
+        </div>
+        {% if form.age.errors %}
+        {{ form.age(class="input-boxes") }}
+        {% for error in form.age.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.age(class="input-boxes") }}
+        {% endif %}
+      </div>
+
+      <div class="gender-div">
+      <div class="gender">
+          <label for="gender">Gender*</label>
+        </div>
+        {% if form.gender.errors %}
+        {{ form.gender(class="input-boxes") }}
+        {% for error in form.gender.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.gender(class="input-boxes") }}
+        {% endif %}
+      </div>
+
+      <div class="chest_pain-div">
+      <div class="chest_pain">
+        <label for="chest_pain">Chest Pain Type*</label>
+      </div>
+      {% if form.chest_pain.errors %}
+      {{ form.chest_pain(class="input-boxes") }}
+      {% for error in form.chest_pain.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.chest_pain(class="input-boxes") }}
+      {% endif %}
+    </div>
+
+    <div class="bp-div">
+      <div class="bp">
+        <label for="bp">Systolic Blood Pressure (mmHg)*</label>
+      </div>
+      {% if form.bp.errors %}
+      {{ form.bp(class="input-boxes") }}
+      {% for error in form.bp.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.bp(class="input-boxes") }}
+      {% endif %}
+    </div>
+
+</div>
+
+<div class="second-block">
+
+    <div class="chol-div">
+      <div class="chol">
+        <label for="chol">Serum Cholestrol (mg/dl)*</label>
+      </div>
+      {% if form.chol.errors %}
+      {{ form.chol(class="input-boxes") }}
+      {% for error in form.chol.errors %}
+      <div class="error">{{ error }}</div>
+      {% endfor %}
+      {% else %}
+      {{ form.chol(class="input-boxes") }}
+      {% endif %}
+    </div>
+
+    <div class="blood_sugar-div">
+      <div class="blood_sugar">
+          <label for="blood_sugar">Fasting Blood Sugar= 120 mg/dl*</label>
+        </div>
+        {% if form.blood_sugar.errors %}
+        {{ form.blood_sugar(class="input-boxes") }}
+        {% for error in form.blood_sugar.errors %}
+        <div class="error">{{ error }}</div>
+        {% endfor %}
+        {% else %}
+        {{ form.blood_sugar(class="input-boxes") }}
+        {% endif %}
+    </div>
+
+    <div class="ekg-div">
+        <div class="ekg">
+            <label for="ekg">Resting Electrocardiographic Results*</label>
+          </div>
+          {% if form.ekg.errors %}
+          {{ form.ekg(class="input-boxes") }}
+          {% for error in form.ekg.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.ekg(class="input-boxes") }}
+          {% endif %}
+      </div>
+
+      <div class="heart_rate-div">
+        <div class="heart_rate">
+            <label for="heart_rate">Maximum Heart Rate Achieved During Exercise (bpm)*</label>
+          </div>
+          {% if form.heart_rate.errors %}
+          {{ form.heart_rate(class="input-boxes") }}
+          {% for error in form.heart_rate.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.heart_rate(class="input-boxes") }}
+          {% endif %}
+      </div>
+
+    </div>
+
+    <div class="third-block">
+
+      <div class="exercise_angina-div">
+        <div class="exercise_angina">
+            <label for="exercise_angina">Exercise-induced Angina*</label>
+          </div>
+          {% if form.exercise_angina.errors %}
+          {{ form.exercise_angina(class="input-boxes") }}
+          {% for error in form.exercise_angina.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.exercise_angina(class="input-boxes") }}
+          {% endif %}
+      </div>
+
+      <div class="st_depression-div">
+        <div class="st_depression">
+            <label for="st_depression">ST Depression Induced by Exercise Relative by Rest*</label>
+          </div>
+          {% if form.st_depression.errors %}
+          {{ form.st_depression(class="input-boxes") }}
+          {% for error in form.st_depression.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.st_depression(class="input-boxes") }}
+          {% endif %}
+      </div>
+
+      <div class="slope-div">
+        <div class="slope">
+            <label for="slope">Slope of the Peak Exercise ST Segment*</label>
+          </div>
+          {% if form.slope.errors %}
+          {{ form.slope(class="input-boxes") }}
+          {% for error in form.slope.errors %}
+          <div class="error">{{ error }}</div>
+          {% endfor %}
+          {% else %}
+          {{ form.slope(class="input-boxes") }}
+          {% endif %}
+      </div>
+
+    </div>
+
+
+      <div class="required">
+        *denotes required fields.
+      </div>
+      <div class="double-check">
+        Please double check all inputs to ensure they are correct before submitting.
+      </div>
+      <div class="submit_data_div">
+        <div type="submit">
+        </div>
+        {{ form.submit(class="submit_data") }}
+      </div>
+    </form>
+  </div>
+</body>
+</html>

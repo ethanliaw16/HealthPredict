@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Heart Disease Output</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='output_heart_disease.css') }}">
+  </head>
+  <body>
+    <h1 class = "title">HealthPredict Results for</h1> <h1 class = "heart-disease">Heart Disease</h1>
+    <!-- <h2 class = "prediction">Prediction: The patient will have a {{prediction}}% chance of developing heart disease.</h2> -->
+    <h2 class = "prediction">Prediction: The patient will have a {{prediction}}% chance of developing heart disease.</h2>
+    <a href='/home'><button class="another">Make Another Prediction</button></a>
+  </body>
+</html>
