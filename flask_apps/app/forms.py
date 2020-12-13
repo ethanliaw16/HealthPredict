@@ -3,10 +3,6 @@ from wtforms import StringField, SubmitField, DecimalField, RadioField, IntegerF
 from wtforms.validators import DataRequired, Optional
 from wtforms.widgets import Input
 
-# class MultiCheckboxField(SelectMultipleField):
-#     widget = widgets.ListWidget(prefix_label=False)
-#     option_widget = widgets.CheckboxInput()
-
 class DiabetesInputsForm (FlaskForm):
     age = IntegerField('Age', validators=[Optional()])
     gender = SelectField('Gender', choices=[('0', 'Female'), ('1', 'Male')], validators=[DataRequired()])

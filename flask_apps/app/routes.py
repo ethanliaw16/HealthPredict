@@ -9,12 +9,6 @@ from app.forms import DiabetesInputsForm, HeartDiseaseInputsForm
 from app.diabetes_form_map import map_form_to_vector
 from app.heart_disease_form_map import map_form_to_vec
 from app.scale_prediction_output import scale_output, scale_input
-#import app.HeartDisease.HeartDiseaseInputs as hdi
-# @app.route('/home', methods=['GET'])
-# def get_data():
-#     some_data = pd.read_csv('../ehr_diabetes_no_missing_3k.csv')
-#     response = {'diabetes_data':some_data.head().to_json()}
-#     return jsonify(response)
 
 @app.route('/')
 @app.route('/home', methods=['GET'])
